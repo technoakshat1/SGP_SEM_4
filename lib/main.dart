@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+//screens
+import './screens/SignInScreen.dart';
+import './screens/SignInLoadingScreen.dart';
+import './screens/SignUpLoadingScreen.dart';
+import './screens/SignUpScreen.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -9,40 +15,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SGPAPPNAME_PLACEHOLDER',//to be changed after thinking
+      title: 'Kitchen Cloud',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Title placeholder'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:<Widget>[
-            Text('Placeholder homepage text'),
-          ]
+        fontFamily: 'Roboto',
+        primaryColor: Color(0XFF397031),
+        primaryColorLight: Color(0xff679f5c),
+        primaryColorDark: Color(0xff054407),
+        accentColor: Color(0xfff6c065),
+        primaryTextTheme: TextTheme(
+          button: TextStyle(color: Colors.black,fontSize:18),
+          headline5: TextStyle(color: Colors.black),
         ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
+      themeMode: ThemeMode.system,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: 'Roboto',
+        primaryColor: Color(0XFF397031),
+        primaryColorLight: Color(0xff679f5c),
+        primaryColorDark: Color(0xff054407),
+        accentColor: Color(0xfff6c065),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryTextTheme: TextTheme(
+          button: TextStyle(color: Colors.black,fontSize:18),
+          headline5: TextStyle(color:Colors.white),
+        ),
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      routes: {
+        '/':(context)=>SignInScreen(),
+        '/createKitchen':(context)=>SignUpScreen(),
+      },
     );
   }
 }
