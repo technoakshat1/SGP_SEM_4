@@ -1,4 +1,5 @@
 wireframe/
+*.env
 # Miscellaneous
 *.class
 *.log
