@@ -9,7 +9,7 @@ export default function buildJwtController(jwt,secret){
                         }
                     }
 
-                    return reject(err);
+                    return reject(new Error(err.name));
                 });
             });
         }
@@ -23,15 +23,15 @@ export default function buildJwtController(jwt,secret){
                         }
                     }
 
-                    return reject(err);
+                    return reject(new Error(err.name));
                 });
             });
         }
 
   
         return Object.freeze({
-           verify:(token)=>verify(token),
-           sign:(user)=>sign(user.username),
+           verify:verify,
+           sign:sign,
         });
 
     

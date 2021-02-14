@@ -1,10 +1,20 @@
 const express = require("express");
 
 //services
-import { createUser, login, isAuthenticated } from "../services/index.js";
+import {
+  createUser,
+  login,
+  isAuthenticated,
+  usernameAvailable,
+} from "../services/index.js";
 
 export default function buildRouter() {
   const router = express.Router();
+
+  router.post("/username_available", async (req, res) => {
+    let isAvailable = await usernameAvailable(req.body.username);
+    res.json(isAvailable);
+  });
 
   router.post("/signUp", async (req, res) => {
     let token = await createUser(req.body);
@@ -17,7 +27,7 @@ export default function buildRouter() {
   });
 
   router.get("/login", async (req, res) => {
-    let authenticated = await isAuthenticated(req.headers.authorization);
+    let authenticated = await isAuthenticated(req.headers.authorization,true);
     res.json(authenticated);
   });
 

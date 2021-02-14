@@ -1,11 +1,11 @@
 export default function buildExtractToken() {
   return function extractToken(authorization) {
     if (!authorization) {
-      throw new Error("Authorization cannot be empty");
+      throw new Error("authorization_empty");
     }
 
     if (authorization.length < 2) {
-      throw new Error("Authorization cannot be less than 2 characters");
+      throw new Error("authorization_empty");
     }
 
     let token = authorization.split(" ")[1];

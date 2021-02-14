@@ -10,47 +10,47 @@ export default function buildMakeUser() {
   }) {
     //console.log(lastName+email);
     if (!username) {
-      throw new Error("Username cannot be empty");
+      throw new Error("username_empty");
     }
 
     if (username.length < 2) {
-      throw new Error("Username cannot be less than 2 characters");
+      throw new Error("username_empty");
     }
 
     if (username.length > 10) {
-      throw new Error("Username cannot be more than 10 characters");
+      throw new Error("username_outOfRange");
     }
 
     if (!email) {
-      throw new Error("Email cannot be empty");
+      throw new Error("email_empty");
     }
 
     if (email.length < 2) {
-      throw new Error("Email cannot be less than 2 characters");
+      throw new Error("email_empty");
     }
 
     if (!firstName) {
-      throw new Error("First cannot be empty");
+      throw new Error("firstname_empty");
     }
 
     if (firstName.length < 2) {
-      throw new Error("FirstName cannot be less than 2 characters");
+      throw new Error("firstname_empty");
     }
 
     if (firstName.length > 10) {
-      throw new Error("FirstName cannot be greater than 10 characters");
+      throw new Error("firstname_outOfRange");
     }
 
     if (!lastName) {
-      throw new Error("LastName cannot be empty");
+      throw new Error("lastname_empty");
     }
 
     if (lastName.length < 2) {
-      throw new Error("LastName cannot be less than 2 characters");
+      throw new Error("lastname_empty");
     }
 
     if (lastName.length > 10) {
-      throw new Error("LastName cannot be greater than 2 characters");
+      throw new Error("lastname_outOfRange");
     }
 
     return Object.freeze({
