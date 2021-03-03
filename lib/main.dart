@@ -5,8 +5,9 @@ import './screens/SignInScreen.dart';
 import './screens/SignInLoadingScreen.dart';
 import './screens/SignUpLoadingScreen.dart';
 import './screens/SignUpScreen.dart';
+import './screens/HomeScreen.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       routes: {
-        '/':(context)=>SignInScreen(),
+        '/':(context)=>HomeScreen(),//SignInScreen()
         '/createKitchen':(context)=>SignUpScreen(),
       },
     );
