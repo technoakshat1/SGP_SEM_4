@@ -15,7 +15,7 @@ export default function buildUserDb(userModel, jwtController) {
 
   async function exists(username) {
     let isAvailable = await userModel.exists({ username: username });
-    return !isAvailable;
+    return isAvailable;
   }
 
   async function login(loginUser) {
@@ -27,6 +27,8 @@ export default function buildUserDb(userModel, jwtController) {
         loginUser.username,
         loginUser.password
       );
+      
+
       if (authenticatedUser.user) {
         const token = await jwtController.sign(authenticatedUser.user.username);
         return token;

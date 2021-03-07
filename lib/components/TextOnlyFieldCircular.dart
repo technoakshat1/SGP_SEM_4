@@ -5,12 +5,17 @@ class TextOnlyFieldCircular extends StatefulWidget {
       {Key key,
       this.labelText,
       @required this.labelFocusColor,
-      @required this.labelUnfocusedColor,})
+      @required this.labelUnfocusedColor,
+      @required this.textController,
+       this.onChange
+      })
       : super(key: key);
 
   final String labelText;
   final Color labelFocusColor;
   final Color labelUnfocusedColor;
+  final TextEditingController textController;
+  final Function onChange;
 
   @override
   _TextOnlyFieldCircularState createState() => _TextOnlyFieldCircularState();
@@ -32,7 +37,9 @@ class _TextOnlyFieldCircularState extends State<TextOnlyFieldCircular> {
         });
       },
       child: TextFormField(
+        onChanged:widget.onChange,
         keyboardType: TextInputType.text,
+        controller: widget.textController,
         decoration: InputDecoration(
           labelText: widget.labelText,
           labelStyle: TextStyle(
@@ -46,6 +53,12 @@ class _TextOnlyFieldCircularState extends State<TextOnlyFieldCircular> {
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
+          ),
+          enabledBorder:OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+            borderSide: BorderSide(
+              color: widget.labelUnfocusedColor,
+            ),
           ),
         ),
       ),

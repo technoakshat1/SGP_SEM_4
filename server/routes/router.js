@@ -28,6 +28,7 @@ export default function buildRouter() {
 
   router.get("/login", async (req, res) => {
     let authenticated = await isAuthenticated(req.headers.authorization,true);
+    //console.log(authenticated);
     res.json(authenticated);
   });
 

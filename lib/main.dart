@@ -46,8 +46,9 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       routes: {
-        '/':(context)=>HomeScreen(),//SignInScreen()
+        '/':(context)=>SignInScreen(),
         '/createKitchen':(context)=>SignUpScreen(),
+        
       },
     );
   }
