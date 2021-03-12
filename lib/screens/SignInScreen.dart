@@ -13,15 +13,11 @@ import './SignInLoadingScreen.dart';
 
 //blocs
 import '../backend/bloc/LoginCubit.dart';
+import '../backend/bloc/GoogleCubit.dart';
 //models
 import '../backend/Models/loginUser.dart';
 
-// TODO UI:add warning text for :
-//         1.username field is not available i.e. invalid.
-//         2.password empty or invalid
-//       Function:
-//         1.connect and get user inputs from diffrent inputs using bloc.
-//         2.make login button working.
+// TODO :
 //         3.make sign in with google working.
 //         4.make continue with facebook working.
 
@@ -36,6 +32,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final LoginCubit cubitA = LoginCubit();
+  final GoogleCubit cubitB=GoogleCubit();
 
   bool isUsernameValid = true;
   bool isPasswordValid = true;
@@ -219,7 +216,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 40,
                 margin: EdgeInsets.only(top: 20),
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cubitB.authenticate();
+                  },
                   splashColor: Colors.black26,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -251,7 +250,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 40,
                 margin: EdgeInsets.only(top: 20),
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cubitB.signOut();
+                  },
                   splashColor: Colors.black26,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,

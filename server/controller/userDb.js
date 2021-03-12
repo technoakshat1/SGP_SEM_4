@@ -40,9 +40,27 @@ export default function buildUserDb(userModel, jwtController) {
     }
   }
 
+  async function getGoogleUser(googleId){
+    let exists=await userModel.findOne({googleId:googleId});
+    return exists;
+  }
+
+  async function refreshGoogleAccessToken(oldToken,newToken){
+    let refreshedToken=await userModel.updateOne({accessToken:oldToken},{accessToken:newToken});
+    return refreshedToken;
+  }
+
+  async function registerGoogleUser(user){
+    let googleUser=await userModel.create(user);
+    return googleUser;
+  }
+
   return Object.freeze({
     register: register,
     exists: exists,
     login: login,
+    getGoogleUser:getGoogleUser,
+    refreshGoogleAccessToken:refreshGoogleAccessToken,
+    registerGoogleUser:registerGoogleUser,
   });
 }

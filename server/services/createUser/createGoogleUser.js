@@ -19,7 +19,7 @@ export default function buildCreateGoogleUser(jwtController,userDb){
                return {token:token};
            }
        }catch(err){
-           console.log(err);
+           console.log(err.message);
            return {Error:err.message};
        }
     }
