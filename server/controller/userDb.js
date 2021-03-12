@@ -46,7 +46,8 @@ export default function buildUserDb(userModel, jwtController) {
   }
 
   async function refreshGoogleAccessToken(oldToken,newToken){
-    let refreshedToken=await userModel.updateOne({accessToken:oldToken},{accessToken:newToken});
+    //console.log(oldToken+' '+newToken);
+    let refreshedToken=await userModel.updateOne({googleAccessToken:oldToken},{googleAccessToken:newToken});
     return refreshedToken;
   }
 

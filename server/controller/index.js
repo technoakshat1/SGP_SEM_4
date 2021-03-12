@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
   googleId: String,
   facebookId: String,
   photoUrl: String,
+  displayName:String,
+  googleAccessToken:String,
 });
 userSchema.plugin(passportLocalMongoose, {
   errorMessages: {

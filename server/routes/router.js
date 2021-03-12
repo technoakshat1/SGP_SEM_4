@@ -7,8 +7,8 @@ import {
   isAuthenticated,
   usernameAvailable,
   googleUserExists,
-  registerGoogleUser,
-  refreshGoogleAccessToken,
+  createGoogleUser,
+  refreshAccessTokens,
   loginGoogleUser,
 } from "../services/index.js";
 
@@ -42,12 +42,12 @@ export default function buildRouter() {
   });
 
   router.post('/signUp/googleUser',async (req,res)=>{
-     let user=await registerGoogleUser(req.body);
+     let user=await createGoogleUser(req.body);
      res.json(user);
   });
 
   router.post('/login/refresh_google_access_token',async (req,res)=>{
-     let refreshedToken=await refreshGoogleAccessToken(req.headers.authorization,req.body);
+     let refreshedToken=await refreshAccessTokens.refreshGoogleAccessToken(req.headers.authorization,req.body);
      res.json(refreshedToken);
   });
 

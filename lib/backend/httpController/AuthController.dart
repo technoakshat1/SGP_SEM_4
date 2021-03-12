@@ -116,7 +116,9 @@ class AuthController extends HttpMain {
       'username': user.username,
       'photoUrl': user.photoUrl,
       'accessToken': user.accessToken,
-      'googleId': user.googleId
+      'googleId': user.googleId,
+      'displayName':user.displayName,
+       'email':user.email,
     };
 
     String uri = super.url + "/signUp/googleUser";
@@ -189,6 +191,7 @@ class AuthController extends HttpMain {
       'googleId': user.googleId,
       'accessToken': user.accessToken,
     };
+    //print(isTokenValid);
     if (isTokenValid) {
       String uri = super.url + "/login/googleUser";
       final response = await http.post(uri, body: body);
@@ -202,6 +205,7 @@ class AuthController extends HttpMain {
       }
     } else {
       final refreshedToken = await _refreshGoogleAccessToken(user);
+      //print(refreshedToken);
       if (refreshedToken) {
         String uri = super.url + "/login/googleUser";
         final response = await http.post(uri, body: body);

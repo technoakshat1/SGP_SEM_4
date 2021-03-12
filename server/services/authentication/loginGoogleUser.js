@@ -6,7 +6,7 @@ export default function buildLoginGoogleUser(jwtController, userDb) {
       if (user) {
         if (
           user.username == httpBody.username &&
-          user.accessToken == httpBody.accessToken
+          user.googleAccessToken == httpBody.accessToken
         ) {
           let token = await jwtController.sign(user.username);
           return { token: token };

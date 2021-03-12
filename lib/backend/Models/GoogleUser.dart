@@ -3,4 +3,6 @@ class GoogleUser {
   String googleId;
   String photoUrl;
   String username;
+  String email;
+  String displayName;
 }

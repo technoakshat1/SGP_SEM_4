@@ -8,9 +8,10 @@ export default function buildRefreshAccessTokens(jwtController, userDb) {
         let verified = await jwtController.verify(token);
         if (verified) {
           let refreshedUser = await userDb.refreshGoogleAccessToken(
-            googleUser.accessToken,
+            googleUser.googleAccessToken,
             httpBody.accessToken
           );
+          //console.log(refreshedUser.n);
           if(refreshedUser.n===1){
               return {refreshedToken:true};
           }

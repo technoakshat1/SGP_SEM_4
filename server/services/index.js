@@ -17,5 +17,5 @@ export const usernameAvailable=buildUsernameAvailable(userDb);
 export const createGoogleUser=buildCreateGoogleUser(jwtController,userDb);
 export const loginGoogleUser=buildLoginGoogleUser(jwtController,userDb);
 export const googleUserExists=buildGoogleUserExists(userDb);
-export const refreshGoogleAccessToken=buildRefreshAccessTokens(jwtController,userDb);
+export const refreshAccessTokens=buildRefreshAccessTokens(jwtController,userDb);
 

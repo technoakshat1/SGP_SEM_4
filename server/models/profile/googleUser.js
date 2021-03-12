@@ -37,7 +37,7 @@ export default function buildMakeGoogleUser() {
       photoUrl,
       googleId,
       displayName,
-      accessToken,
+      googleAccessToken:accessToken,
     });
   };
 }
