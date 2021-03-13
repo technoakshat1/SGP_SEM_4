@@ -114,7 +114,7 @@ class AuthController extends HttpMain {
   Future<bool> signUpGoogleUser(GoogleUser user) async {
     Map<String, String> body = {
       'username': user.username,
-      'photoUrl': user.photoUrl,
+      'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
       'accessToken': user.accessToken,
       'googleId': user.googleId,
       'displayName':user.displayName,
@@ -122,7 +122,7 @@ class AuthController extends HttpMain {
     };
 
     String uri = super.url + "/signUp/googleUser";
-
+    print(uri);
     final response = await http.post(uri, body: body);
     String token = super.responseFieldExtractor(
       response,

@@ -54,6 +54,10 @@ export default function buildRouter() {
   router.post('/login/googleUser',async(req,res)=>{
     let token=await loginGoogleUser(req.body);
     res.json(token);
+  });
+
+  router.get('/',(req,res)=>{
+    res.send('Hello welcome to kitchen cloud!');
   })
 
   return router;
