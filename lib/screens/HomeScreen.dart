@@ -10,52 +10,83 @@ import '../backend/Models/loginUser.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key key}) : super(key: key);
-  
+
   final AuthController obj=new AuthController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext ctx) {
-            return IconButton(
-              icon: const Icon(Icons
-                  .account_circle_rounded), //placeholder to be replaced by image widget
-              onPressed: () {
-                Scaffold.of(ctx).openDrawer();
-              },
-            );
-          },
+      appBar: new AppBar(
+        backgroundColor: Colors.lightBlue,
+        title: Text('Kitchen cloud'),
+        actions: [
+          new IconButton(icon: Icon(Icons.search , color: Colors.white,), onPressed: (){}),
+          new IconButton(icon: Icon(Icons.shopping_cart , color: Colors.white,), onPressed: (){})
+        ],
+      ),
+      drawer: new Drawer(
+        child: new ListView(
+          children: [
+            new UserAccountsDrawerHeader(accountName: Text('Rushi Jobanputra'), accountEmail: Text('rushijobanputra1203@gmail.com'),
+              currentAccountPicture: GestureDetector(
+                child: new CircleAvatar(
+                  backgroundColor: Colors.black12,
+                  child: Icon(Icons.person, color: Colors.white,) ,
+                ),
+              ),
+              decoration: new BoxDecoration(color: Colors.blue),
+            ),
+
+            InkWell(
+                onTap: (){},
+                child: new  ListTile(
+                  title: Text('FAVORITES'),
+                  leading: Icon(Icons.favorite),)
+            ),
+
+            InkWell(
+                onTap: (){},
+                child: new  ListTile(
+                  title: Text('BREAKFAST'),
+                  leading: Icon(Icons.free_breakfast_outlined),)
+            ),
+            InkWell(
+              onTap: (){},
+              child: new ListTile(title: Text('BRUNCH'),
+                leading: Icon(Icons.brunch_dining),),
+            ),
+            InkWell(
+              onTap: (){},
+              child: new ListTile(title: Text('LUNCH'),
+                leading: Icon(Icons.fastfood_outlined),),
+            ),
+            InkWell(
+              onTap: (){},
+              child: new ListTile(title: Text('HIGH TEA'),
+                leading: Icon(Icons.restaurant_menu_sharp),),
+            ),
+            InkWell(
+              onTap: (){},
+              child: new ListTile(title: Text('DINNER'),
+                leading: Icon(Icons.dinner_dining),),
+            ),
+            InkWell(
+              onTap: (){},
+              child: new ListTile(title: Text('DESERT'),
+                leading: Icon(Icons.icecream),),
+            ),
+            Divider(),
+
+            InkWell(
+              onTap: (){},
+              child: new ListTile(title: Text('Settings'),
+                leading: Icon(Icons.settings),),
+            )
+
+          ],
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          RaisedButton(
-            child: Text("Press Me"),
-            onPressed: () {
-               //LoginUser user=new LoginUser(username:"test10",password:"test10");
-              //  SignUpUser user= new SignUpUser(
-              //   username:"test12",
-              //   password:"test10",
-              //   email:"abc@test.com",
-              //   firstName:"test",
-              //   lastName:"number10"
-              //  );
-              //obj.signUp(user);
-              //obj.login(user);
-              //obj.usernameAvailable('test10');
-            }
-          ),
-           RaisedButton(
-            child: Text("Logout"),
-            onPressed: () {
-               obj.logout();
-            }
-          ),
-        ],
-      ), //build body
-      drawer: AppDrawer(), //build drawer in app drawer file
-    );
+
+    ); //build drawer in app drawer file
   }
 }
