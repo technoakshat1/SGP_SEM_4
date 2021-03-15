@@ -7,23 +7,21 @@ import '../components/TextOnlyFieldCircular.dart';
 import '../components/PasswordOnlyFieldCircular.dart';
 import '../components/AccentButtonCircular.dart';
 import '../components/DefaultPageTransition.dart';
+import '../components/oAuthUserSignUp.dart';
 
 //animated page import
 import './SignInLoadingScreen.dart';
 
 //blocs
 import '../backend/bloc/LoginCubit.dart';
+import '../backend/bloc/GoogleCubit.dart';
 //models
 import '../backend/Models/loginUser.dart';
 
-// TODO UI:add warning text for :
-//         1.username field is not available i.e. invalid.
-//         2.password empty or invalid
-//       Function:
-//         1.connect and get user inputs from diffrent inputs using bloc.
-//         2.make login button working.
+// TODO :
 //         3.make sign in with google working.
 //         4.make continue with facebook working.
+enum OAuthLoginOrSignUp { Login, SignUp }
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -36,9 +34,11 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final LoginCubit cubitA = LoginCubit();
+  final GoogleCubit cubitB = GoogleCubit();
 
   bool isUsernameValid = true;
   bool isPasswordValid = true;
+  OAuthLoginOrSignUp status=OAuthLoginOrSignUp.Login;
 
   @override
   void dispose() {
@@ -108,200 +108,229 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: BlocConsumer<LoginCubit, LoginStatus>(
-          cubit: cubitA,
+        child: BlocListener(
+          cubit: cubitB,
           listener: (ctx, state) {
-            if (state == LoginStatus.Authenticated) {
-              DefaultPageTransition transition =
+            //print(state);
+            if (state == GoogleLoginStatus.SignUp) {
+              setState(() {
+                status=OAuthLoginOrSignUp.SignUp;
+              });
+              showDialog(
+                context: context,
+                builder: (ctx) => OAuthSignUpDialog(
+                  cubitA: cubitB,
+                ),
+              );
+            } else if (state == GoogleLoginStatus.Authenticated) {
+              if(status==OAuthLoginOrSignUp.Login){
+                 DefaultPageTransition transition =
                   DefaultPageTransition(SignInLoadingScreen());
               Navigator.of(ctx).pushReplacement(transition.createRoute());
-            } else if (state == LoginStatus.PasswordIncorrect) {
-              setState(() {
-                isPasswordValid = false;
-              });
-            } else if (state == LoginStatus.UsernameIncorrect) {
-              setState(() {
-                isUsernameValid = false;
-              });
+              }else{
+                Navigator.of(ctx).pop();
+              }
             }
           },
-          builder: (ctx, state) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: 300,
-                margin: EdgeInsets.only(bottom: 0),
-                child: Image.asset(
-                  imageAssetUri,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: TextOnlyFieldCircular(
-                  textController: usernameController,
-                  labelText: 'Username',
-                  labelFocusColor:
-                      !isUsernameValid ? Colors.red : Color(0xffaf0069),
-                  labelUnfocusedColor:
-                      !isUsernameValid ? Colors.red : Colors.grey,
-                  onChange: validateUsername,
-                ),
-              ),
-              if (!isUsernameValid)
+          child: BlocConsumer<LoginCubit, LoginStatus>(
+            cubit: cubitA,
+            listener: (ctx, state) {
+              if (state == LoginStatus.Authenticated) {
+                DefaultPageTransition transition =
+                    DefaultPageTransition(SignInLoadingScreen());
+                Navigator.of(ctx).pushReplacement(transition.createRoute());
+              } else if (state == LoginStatus.PasswordIncorrect) {
+                setState(() {
+                  isPasswordValid = false;
+                });
+              } else if (state == LoginStatus.UsernameIncorrect) {
+                setState(() {
+                  isUsernameValid = false;
+                });
+              }
+            },
+            builder: (ctx, state) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: Text(
-                    'Username is incorrect or empty!',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
+                  height: 300,
+                  margin: EdgeInsets.only(bottom: 0),
+                  child: Image.asset(
+                    imageAssetUri,
+                    fit: BoxFit.cover,
                   ),
                 ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                padding: EdgeInsets.all(10),
-                child: PasswordOnlyFieldCircular(
-                  textController: passwordController,
-                  labelText: 'Password',
-                  labelFocusColor:
-                      !isPasswordValid ? Colors.red : Color(0xffaf0069),
-                  labelUnfocusedColor:
-                      !isPasswordValid ? Colors.red : Colors.grey,
-                  onChange: validatePassword,
-                ),
-              ),
-              if (!isPasswordValid)
                 Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    'Password is incorrect or empty!',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
+                  padding: EdgeInsets.all(10),
+                  child: TextOnlyFieldCircular(
+                    textController: usernameController,
+                    labelText: 'Username',
+                    labelFocusColor:
+                        !isUsernameValid ? Colors.red : Color(0xffaf0069),
+                    labelUnfocusedColor:
+                        !isUsernameValid ? Colors.red : Colors.grey,
+                    onChange: validateUsername,
                   ),
                 ),
-              Container(
-                width: 300,
-                height: 40,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 300,
-                      height: 40,
-                      child: AccentButtonCircular(
-                        displayText: 'Login',
-                        onPress: localLogin,
+                if (!isUsernameValid)
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Text(
+                      'Username is incorrect or empty!',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.red,
+                        fontSize: 18,
                       ),
                     ),
-                    if (state == LoginStatus.Loading)
+                  ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  padding: EdgeInsets.all(10),
+                  child: PasswordOnlyFieldCircular(
+                    textController: passwordController,
+                    labelText: 'Password',
+                    labelFocusColor:
+                        !isPasswordValid ? Colors.red : Color(0xffaf0069),
+                    labelUnfocusedColor:
+                        !isPasswordValid ? Colors.red : Colors.grey,
+                    onChange: validatePassword,
+                  ),
+                ),
+                if (!isPasswordValid)
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      'Password is incorrect or empty!',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.red,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                Container(
+                  width: 300,
+                  height: 40,
+                  child: Stack(
+                    children: [
                       Container(
-                        margin: EdgeInsets.only(left: 70, top: 5),
-                        height: 25,
-                        width: 25,
-                        child: CircularProgressIndicator(
-                          value: null,
-                          valueColor: new AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColor,
+                        width: 300,
+                        height: 40,
+                        child: AccentButtonCircular(
+                          displayText: 'Login',
+                          onPress: localLogin,
+                        ),
+                      ),
+                      if (state == LoginStatus.Loading)
+                        Container(
+                          margin: EdgeInsets.only(left: 70, top: 5),
+                          height: 25,
+                          width: 25,
+                          child: CircularProgressIndicator(
+                            value: null,
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).primaryColor,
+                            ),
+                            strokeWidth: 3.0,
                           ),
-                          strokeWidth: 3.0,
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 300,
-                height: 40,
-                margin: EdgeInsets.only(top: 20),
-                child: RaisedButton(
-                  onPressed: () {},
-                  splashColor: Colors.black26,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      FaIcon(
-                        FontAwesomeIcons.google,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 30),
-                        child: Text(
-                          'Sign in with Google',
-                          //style: Theme.of(context).primaryTextTheme.button,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
                     ],
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  color: Colors.red,
                 ),
-              ),
-              Container(
-                width: 300,
-                height: 40,
-                margin: EdgeInsets.only(top: 20),
-                child: RaisedButton(
-                  onPressed: () {},
-                  splashColor: Colors.black26,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      FaIcon(
-                        FontAwesomeIcons.facebook,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Continue with facebook',
-                          //style: Theme.of(context).primaryTextTheme.button,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                Container(
+                  width: 300,
+                  height: 40,
+                  margin: EdgeInsets.only(top: 20),
+                  child: RaisedButton(
+                    onPressed: () {
+                      cubitB.authenticate();
+                    },
+                    splashColor: Colors.black26,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        FaIcon(
+                          FontAwesomeIcons.google,
+                          color: Colors.white,
                         ),
+                        Container(
+                          margin: EdgeInsets.only(left: 30),
+                          child: Text(
+                            'Sign in with Google',
+                            //style: Theme.of(context).primaryTextTheme.button,
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(50),
                       ),
-                    ],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
                     ),
-                  ),
-                  color: Color(0xff1877f2),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 30),
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/createKitchen');
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    side: BorderSide(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  child: Text(
-                    'Create Kitchen ?',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    color: Colors.red,
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  width: 300,
+                  height: 40,
+                  margin: EdgeInsets.only(top: 20),
+                  child: RaisedButton(
+                    onPressed: () {
+                      cubitB.signOut();
+                    },
+                    splashColor: Colors.black26,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        FaIcon(
+                          FontAwesomeIcons.facebook,
+                          color: Colors.white,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 20),
+                          child: Text(
+                            'Continue with facebook',
+                            //style: Theme.of(context).primaryTextTheme.button,
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(50),
+                      ),
+                    ),
+                    color: Color(0xff1877f2),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/createKitchen');
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      side: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    child: Text(
+                      'Create Kitchen ?',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

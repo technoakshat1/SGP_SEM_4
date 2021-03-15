@@ -84,7 +84,7 @@ class HttpMain {
     if (response.statusCode == 200) {
       final parsedResponse = _parseResponse(response);
       if (parsedResponse["error"] == null) {
-        print(parsedResponse['response'][field]);
+        //print(parsedResponse['response']);
         return parsedResponse['response'][field];
       } else {
         return onResponseError(parsedResponse['error']);
