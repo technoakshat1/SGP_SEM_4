@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_app/backend/bloc/facebook_cubit.dart';
 
 //components
 import '../components/TextOnlyFieldCircular.dart';
@@ -35,6 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final LoginCubit cubitA = LoginCubit();
   final GoogleCubit cubitB = GoogleCubit();
+  final FacebookCubit cubitC=FacebookCubit();
 
   bool isUsernameValid = true;
   bool isPasswordValid = true;
@@ -278,7 +280,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   margin: EdgeInsets.only(top: 20),
                   child: RaisedButton(
                     onPressed: () {
-                      cubitB.signOut();
+                      cubitC.authenticate();
                     },
                     splashColor: Colors.black26,
                     child: Row(

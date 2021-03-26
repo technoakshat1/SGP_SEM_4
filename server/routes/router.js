@@ -56,6 +56,25 @@ export default function buildRouter() {
     res.json(token);
   });
 
+  router.post('/facebook_user_exists',async(req,res)=>{
+    let exists=await facebookUserExists(req.body);
+    res.json(exists);
+ });
+
+ router.post('/signUp/facebookUser',async (req,res)=>{
+    let user=await createGoogleUser(req.body);
+    res.json(user);
+ });
+
+ router.post('/login/refresh_facebook_access_token',async (req,res)=>{
+    let refreshedToken=await refreshAccessTokens.refreshGoogleAccessToken(req.headers.authorization,req.body);
+    res.json(refreshedToken);
+ });
+
+ router.post('/login/facebookUser',async(req,res)=>{
+   let token=await loginGoogleUser(req.body);
+   res.json(token);
+ });
   router.get('/',(req,res)=>{
     res.send('Hello welcome to kitchen cloud!');
   })

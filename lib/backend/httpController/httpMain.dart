@@ -14,7 +14,7 @@ enum Error {
 }
 
 class HttpMain {
-  static const String pcIpv4 = "192.168.43.157"; //your device IP
+  static const String pcIpv4 = "192.168.0.108"; //your device IP
   String url = 'http://$pcIpv4:3000';
   static const String TOKEN = "TOKEN";
   

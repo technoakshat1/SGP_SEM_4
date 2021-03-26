@@ -55,6 +55,21 @@ export default function buildUserDb(userModel, jwtController) {
     let googleUser=await userModel.create(user);
     return googleUser;
   }
+  async function getFacebookUser(googleId){
+    let exists=await userModel.findOne({facebookId:facebookId});
+    return exists;
+  }
+
+  async function refreshFacebookAccessToken(oldToken,newToken){
+    //console.log(oldToken+' '+newToken);
+    let refreshedToken=await userModel.updateOne({facebookeAccessToken:oldToken},{facebookAccessToken:newToken});
+    return refreshedToken;
+  }
+
+  async function registerFacebookUser(user){
+    let facebookUser=await userModel.create(user);
+    return facebookUser;
+  }
 
   return Object.freeze({
     register: register,
@@ -63,5 +78,7 @@ export default function buildUserDb(userModel, jwtController) {
     getGoogleUser:getGoogleUser,
     refreshGoogleAccessToken:refreshGoogleAccessToken,
     registerGoogleUser:registerGoogleUser,
+    refreshFacebookAccessToken:refreshFacebookAccessToken,
+    registerFacebookUser:registerFacebookUser,
   });
 }

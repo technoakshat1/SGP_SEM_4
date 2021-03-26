@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
- 
   "scripts": {
     "babel-node": "babel-node --presets=@babel/preset-env",
     "start": "nodemon --exec npm run babel-node -- app.js",
@@ -13,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
     "passport": "^0.4.1",
     "passport-local-mongoose": "^6.1.0"

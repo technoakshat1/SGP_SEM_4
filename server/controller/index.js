@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   photoUrl: String,
   displayName:String,
   googleAccessToken:String,
+  facebookAccessToken:String,
 });
 userSchema.plugin(passportLocalMongoose, {
   errorMessages: {
