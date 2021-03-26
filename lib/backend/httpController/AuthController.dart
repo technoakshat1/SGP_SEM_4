@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:recipe_app/backend/Models/FacebookUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //parent
@@ -11,6 +12,7 @@ import '../Models/GoogleUser.dart';
 
 class AuthController extends HttpMain {
   static const String GOOGLE_ACCESS_TOKEN = "GOOGLE_ACCESS_TOKEN";
+  static const String FACEBOOK_ACCESS_TOKEN="FACEBOOK_ACCESS_TOKEN";
 
   Future<dynamic> isAuthenticated() async {
     String token = await super.storedToken;
@@ -110,6 +112,26 @@ class AuthController extends HttpMain {
     }
     return null;
   }
+  Future<FacebookUser> facebookUserExists(String id) async{
+    Map<String,String> body={'facebookId':id};
+    String uri = super.url + "/facebook_user_exists";
+    final response=await http.post(uri,body: body);
+    bool exists=super.responseFieldExtractor(response,
+      field: 'exists',
+      onResponseError: (_)=>false,
+      onServerError: (_)=>false,
+    );
+    if(exists){
+      FacebookUser user=FacebookUser();
+      user.username=super.responseFieldExtractor(response,
+        field: 'username',
+        onResponseError: (_)=>null,
+        onServerError: (_)=>null,
+      );
+      return user;
+    }
+    return null;
+  }
 
   Future<bool> signUpGoogleUser(GoogleUser user) async {
     Map<String, String> body = {
@@ -137,6 +159,32 @@ class AuthController extends HttpMain {
     }
     return false;
   }
+  Future<bool> signUpFacebookUser(FacebookUser user) async {
+    Map<String, String> body = {
+      'username': user.username,
+      'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
+      'accessToken': user.accessToken,
+      'googleId': user.facebookid,
+      'displayName':user.name,
+      'email':user.email,
+    };
+
+    String uri = super.url + "/signUp/facebookUser";
+    print(uri);
+    final response = await http.post(uri, body: body);
+    String token = super.responseFieldExtractor(
+      response,
+      field: 'token',
+      onResponseError: (_) => null,
+      onServerError: (_) => null,
+    );
+
+    if (token != null) {
+      await _storeFacebookAccessToken(user.accessToken);
+      return await super.setToken(token);
+    }
+    return false;
+  }
 
   Future<bool> _isGoogleAccessTokenValid(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -148,11 +196,25 @@ class AuthController extends HttpMain {
       return false;
     }
   }
+  Future<bool> _isFacebookAccessTokenValid(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String storedToken = prefs.getString(FACEBOOK_ACCESS_TOKEN);
 
+    if (storedToken != null) {
+      return token == storedToken;
+    } else {
+      return false;
+    }
+  }
   Future<void> _storeGoogleAccessToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(GOOGLE_ACCESS_TOKEN, token);
   }
+  Future<void> _storeFacebookAccessToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(FACEBOOK_ACCESS_TOKEN, token);
+  }
+
 
   Future<bool> _refreshGoogleAccessToken(GoogleUser user) async {
     Map<String, String> body = {
@@ -183,6 +245,35 @@ class AuthController extends HttpMain {
 
     return false;
   }
+  Future<bool> _refreshFacebookAccessToken(FacebookUser user) async {
+    Map<String, String> body = {
+      'username': user.username,
+      'googleId': user.facebookid,
+      'accessToken': user.accessToken,
+    };
+
+    String token = await super.storedToken;
+
+    Map<String, String> header = {'Authorization': 'Bearer $token'};
+
+    String uri = super.url + "/login/refresh_facebook_access_token";
+
+    final response = await http.post(uri, body: body, headers: header);
+
+    bool refresed = super.responseFieldExtractor(
+      response,
+      field: 'refreshedToken',
+      onResponseError: (_) => false,
+      onServerError: (_) => false,
+    );
+
+    if (refresed) {
+      await _storeFacebookAccessToken(user.accessToken);
+      return true;
+    }
+
+    return false;
+  }
 
   Future<bool> loginGoogleUser(GoogleUser user) async {
     final isTokenValid = await _isGoogleAccessTokenValid(user.accessToken);
@@ -208,6 +299,43 @@ class AuthController extends HttpMain {
       //print(refreshedToken);
       if (refreshedToken) {
         String uri = super.url + "/login/googleUser";
+        final response = await http.post(uri, body: body);
+        String token = super.responseFieldExtractor(response,
+            field: 'token',
+            onResponseError: (_) => null,
+            onServerError: (_) => null);
+        if (token != null) {
+          await super.setToken(token);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  Future<bool> loginFacebookUser(FacebookUser user) async {
+    final isTokenValid = await _isFacebookAccessTokenValid(user.accessToken);
+    Map<String, String> body = {
+      'username': user.username,
+      'googleId': user.facebookid,
+      'accessToken': user.accessToken,
+    };
+    //print(isTokenValid);
+    if (isTokenValid) {
+      String uri = super.url + "/login/facebookUser";
+      final response = await http.post(uri, body: body);
+      String token = super.responseFieldExtractor(response,
+          field: 'token',
+          onResponseError: (_) => null,
+          onServerError: (_) => null);
+      if (token != null) {
+        await super.setToken(token);
+        return true;
+      }
+    } else {
+      final refreshedToken = await _refreshFacebookAccessToken(user);
+      //print(refreshedToken);
+      if (refreshedToken) {
+        String uri = super.url + "/login/facebookUser";
         final response = await http.post(uri, body: body);
         String token = super.responseFieldExtractor(response,
             field: 'token',

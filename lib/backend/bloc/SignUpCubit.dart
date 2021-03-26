@@ -17,6 +17,7 @@ class SignUpCubit extends Cubit<dynamic> {
   void signUp(SignUpUser user) async {
     emit(SignUpStatus.Loading);
     bool response = await Future.delayed(Duration(seconds: 3),()=>controller.signUp(user));
+    print(response);
     if(response){
       emit(SignUpStatus.Successfull);
     }else{

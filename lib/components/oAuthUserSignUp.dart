@@ -77,7 +77,7 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
       ],
       child: SimpleDialog(
         title: Text('Welcome to Kitchen Cloud!'),
-        insetPadding: EdgeInsets.all(0),
+        titlePadding: EdgeInsets.all(0),
         contentPadding: EdgeInsets.all(5),
         children: [
           Container(
