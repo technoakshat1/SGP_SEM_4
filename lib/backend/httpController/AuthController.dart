@@ -138,7 +138,7 @@ class AuthController extends HttpMain {
       'username': user.username,
       'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
       'accessToken': user.accessToken,
-      'googleId': user.googleId,
+      'facebookId': user.googleId,
       'displayName':user.displayName,
        'email':user.email,
     };
@@ -164,7 +164,7 @@ class AuthController extends HttpMain {
       'username': user.username,
       'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
       'accessToken': user.accessToken,
-      'googleId': user.facebookid,
+      'facebookId': user.facebookid,
       'displayName':user.name,
       'email':user.email,
     };
@@ -248,7 +248,7 @@ class AuthController extends HttpMain {
   Future<bool> _refreshFacebookAccessToken(FacebookUser user) async {
     Map<String, String> body = {
       'username': user.username,
-      'googleId': user.facebookid,
+      'facebookId': user.facebookid,
       'accessToken': user.accessToken,
     };
 
@@ -316,7 +316,7 @@ class AuthController extends HttpMain {
     final isTokenValid = await _isFacebookAccessTokenValid(user.accessToken);
     Map<String, String> body = {
       'username': user.username,
-      'googleId': user.facebookid,
+      'facebookId': user.facebookid,
       'accessToken': user.accessToken,
     };
     //print(isTokenValid);

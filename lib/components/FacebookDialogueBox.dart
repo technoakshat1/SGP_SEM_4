@@ -1,6 +1,7 @@
 import 'package:flutter/Material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_app/backend/bloc/facebook_cubit.dart';
 //components
 import './TextOnlyFieldCircular.dart';
 import './AccentButtonCircular.dart';
@@ -10,20 +11,19 @@ import './DefaultPageTransition.dart';
 import '../screens/SignUpLoadingScreen.dart';
 
 //blocs
-import '../backend/bloc/GoogleCubit.dart';
 import '../backend/bloc/SignUpCubit.dart';
 
-class OAuthSignUpDialog extends StatefulWidget {
-  OAuthSignUpDialog({Key key, this.cubitA}) : super(key: key);
+class FacebookDialogueBox extends StatefulWidget {
+  FacebookDialogueBox({Key key, this.cubitA}) : super(key: key);
 
-  final GoogleCubit cubitA;
+  final FacebookCubit cubitA;
 
 
   @override
-  _OAuthSignUpDialogState createState() => _OAuthSignUpDialogState();
+  _FacebookDialogueState createState() => _FacebookDialogueState();
 }
 
-class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
+class _FacebookDialogueState extends State<FacebookDialogueBox> {
   final TextEditingController usernameController = TextEditingController();
   final SignUpCubit cubitB = SignUpCubit();
   final GlobalKey _k1 = GlobalKey();
@@ -128,9 +128,9 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
                     key: _k1,
                     labelText: '*Username',
                     labelFocusColor:
-                        !isUsernameAvailable ? Colors.red : Color(0xffaf0069),
+                    !isUsernameAvailable ? Colors.red : Color(0xffaf0069),
                     labelUnfocusedColor:
-                        !isUsernameAvailable ? Colors.red : Colors.grey,
+                    !isUsernameAvailable ? Colors.red : Colors.grey,
                     textController: usernameController,
                     onChange: validateUsername,
                   ),
@@ -154,7 +154,7 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
                       if (isUsernameAvailable && username.isNotEmpty) {
                         widget.cubitA.signUp(username);
                         DefaultPageTransition transition =
-                            DefaultPageTransition(SignUpLoadingScreen(cubit:widget.cubitA));
+                        DefaultPageTransition(SignUpLoadingScreen(cubit:widget.cubitA));
                         Navigator.of(context)
                             .pushReplacement(transition.createRoute());
                       }

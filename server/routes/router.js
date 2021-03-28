@@ -62,17 +62,17 @@ export default function buildRouter() {
  });
 
  router.post('/signUp/facebookUser',async (req,res)=>{
-    let user=await createGoogleUser(req.body);
+    let user=await createFacebookUser(req.body);
     res.json(user);
  });
 
  router.post('/login/refresh_facebook_access_token',async (req,res)=>{
-    let refreshedToken=await refreshAccessTokens.refreshGoogleAccessToken(req.headers.authorization,req.body);
+    let refreshedToken=await refreshFacebookAccessTokens.refreshFacebookAccessTokens(req.headers.authorization,req.body);
     res.json(refreshedToken);
  });
 
  router.post('/login/facebookUser',async(req,res)=>{
-   let token=await loginGoogleUser(req.body);
+   let token=await loginFacebookUser(req.body);
    res.json(token);
  });
   router.get('/',(req,res)=>{

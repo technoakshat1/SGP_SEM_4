@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_app/backend/bloc/facebook_cubit.dart';
+import 'package:recipe_app/components/FacebookDialogueBox.dart';
 
 //components
 import '../components/TextOnlyFieldCircular.dart';
@@ -110,36 +111,63 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: BlocListener(
-          cubit: cubitB,
-          listener: (ctx, state) {
-            //print(state);
-            if (state == GoogleLoginStatus.SignUp) {
-              setState(() {
-                status=OAuthLoginOrSignUp.SignUp;
-              });
-              showDialog(
-                context: context,
-                builder: (ctx) => OAuthSignUpDialog(
-                  cubitA: cubitB,
-                ),
-              );
-            } else if (state == GoogleLoginStatus.Authenticated) {
-              if(status==OAuthLoginOrSignUp.Login){
-                 DefaultPageTransition transition =
-                  DefaultPageTransition(SignInLoadingScreen());
-              Navigator.of(ctx).pushReplacement(transition.createRoute());
-              }else{
-                Navigator.of(ctx).pop();
-              }
-            }
-          },
+        child:MultiBlocListener(
+          listeners: [
+            BlocListener<FacebookCubit,FacebookAuthStatus>(
+               cubit: cubitC,
+              listener: (ctx,state){
+                 if(state==FacebookAuthStatus.SingUp){
+                   setState(() {
+                     status=OAuthLoginOrSignUp.SignUp;
+                   });
+                   showDialog(
+                     context: context,
+                     builder: (ctx)=>FacebookDialogueBox(
+                       cubitA: cubitC,
+                     ),
+                   );
+                 }else if(state==FacebookAuthStatus.Authenticated){
+                   if(status==OAuthLoginOrSignUp.Login){
+                     DefaultPageTransition transition=DefaultPageTransition(SignInLoadingScreen());
+                     Navigator.of(ctx).pushReplacement(transition.createRoute());
+                   }else{
+                     Navigator.of(ctx).pop();
+                   }
+                 }
+              },
+            ),
+            BlocListener<GoogleCubit,GoogleLoginStatus>(
+              cubit: cubitB,
+              listener: (ctx, state) {
+                //print(state);
+                if (state == GoogleLoginStatus.SignUp) {
+                  setState(() {
+                    status=OAuthLoginOrSignUp.SignUp;
+                  });
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => OAuthSignUpDialog(
+                      cubitA: cubitB,
+                    ),
+                  );
+                } else if (state == GoogleLoginStatus.Authenticated) {
+                  if(status==OAuthLoginOrSignUp.Login){
+                    DefaultPageTransition transition =
+                    DefaultPageTransition(SignInLoadingScreen());
+                    Navigator.of(ctx).pushReplacement(transition.createRoute());
+                  }else{
+                    Navigator.of(ctx).pop();
+                  }
+                }
+              },
+            )
+          ],
           child: BlocConsumer<LoginCubit, LoginStatus>(
             cubit: cubitA,
             listener: (ctx, state) {
               if (state == LoginStatus.Authenticated) {
                 DefaultPageTransition transition =
-                    DefaultPageTransition(SignInLoadingScreen());
+                DefaultPageTransition(SignInLoadingScreen());
                 Navigator.of(ctx).pushReplacement(transition.createRoute());
               } else if (state == LoginStatus.PasswordIncorrect) {
                 setState(() {
@@ -168,9 +196,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     textController: usernameController,
                     labelText: 'Username',
                     labelFocusColor:
-                        !isUsernameValid ? Colors.red : Color(0xffaf0069),
+                    !isUsernameValid ? Colors.red : Color(0xffaf0069),
                     labelUnfocusedColor:
-                        !isUsernameValid ? Colors.red : Colors.grey,
+                    !isUsernameValid ? Colors.red : Colors.grey,
                     onChange: validateUsername,
                   ),
                 ),
@@ -193,9 +221,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     textController: passwordController,
                     labelText: 'Password',
                     labelFocusColor:
-                        !isPasswordValid ? Colors.red : Color(0xffaf0069),
+                    !isPasswordValid ? Colors.red : Color(0xffaf0069),
                     labelUnfocusedColor:
-                        !isPasswordValid ? Colors.red : Colors.grey,
+                    !isPasswordValid ? Colors.red : Colors.grey,
                     onChange: validatePassword,
                   ),
                 ),
@@ -334,7 +362,9 @@ class _SignInScreenState extends State<SignInScreen> {
               ],
             ),
           ),
+
         ),
+
       ),
     );
   }
