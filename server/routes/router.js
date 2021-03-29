@@ -10,6 +10,10 @@ import {
   createGoogleUser,
   refreshAccessTokens,
   loginGoogleUser,
+  createFacebookUser,
+  loginFacebookUser,
+  facebookUserExists,
+  refreshFacebookAccessTokens
 } from "../services/index.js";
 
 export default function buildRouter() {

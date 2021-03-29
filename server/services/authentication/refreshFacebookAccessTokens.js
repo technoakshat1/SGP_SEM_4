@@ -24,6 +24,6 @@ export default function buildRefreshFacebookAccessTokens(jwtController, userDb) 
   }
 
   return Object.freeze({
-    refreshFacebookAccessToken:refreshFacebookAccessToken,
+    refreshFacebookAccessTokens:refreshFacebookAccessTokens,
   });
 }
