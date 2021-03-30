@@ -14,7 +14,7 @@ import buildLoginFacebookUser from './authentication/loginFacebookUser.js';
 import buildFacebookUserExists from './authentication/facebookUserExists.js';
 
 import buildRefreshAccessTokens from './authentication/refreshAccessTokens.js';
-
+import buildRefreshFacebookAccessTokens from './authentication/refreshFacebookAccessTokens.js'
 
 export const isAuthenticated=buildIsAuthenticated(jwtController,userDb);
 export const createUser=buildCreateUser(userDb);
@@ -29,3 +29,4 @@ export const facebookUserExists=buildFacebookUserExists(userDb);
 
 export const refreshAccessTokens=buildRefreshAccessTokens(jwtController,userDb);
 
+export const refreshFacebookAccessTokens=buildRefreshFacebookAccessTokens(jwtController,userDb);

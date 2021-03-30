@@ -4,5 +4,5 @@ class FacebookUser{
   String email;
   String photoUrl;
   String username;
-  String facebookid;
+  String facebookId;
 }

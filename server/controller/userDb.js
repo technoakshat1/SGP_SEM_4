@@ -55,14 +55,14 @@ export default function buildUserDb(userModel, jwtController) {
     let googleUser=await userModel.create(user);
     return googleUser;
   }
-  async function getFacebookUser(googleId){
+  async function getFacebookUser(facebookId){
     let exists=await userModel.findOne({facebookId:facebookId});
     return exists;
   }
 
   async function refreshFacebookAccessToken(oldToken,newToken){
     //console.log(oldToken+' '+newToken);
-    let refreshedToken=await userModel.updateOne({facebookeAccessToken:oldToken},{facebookAccessToken:newToken});
+    let refreshedToken=await userModel.updateOne({facebookAccessToken:oldToken},{facebookAccessToken:newToken});
     return refreshedToken;
   }
 
@@ -76,6 +76,7 @@ export default function buildUserDb(userModel, jwtController) {
     exists: exists,
     login: login,
     getGoogleUser:getGoogleUser,
+    getFacebookUser:getFacebookUser,
     refreshGoogleAccessToken:refreshGoogleAccessToken,
     registerGoogleUser:registerGoogleUser,
     refreshFacebookAccessToken:refreshFacebookAccessToken,
