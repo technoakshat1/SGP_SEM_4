@@ -138,7 +138,7 @@ class AuthController extends HttpMain {
       'username': user.username,
       'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
       'accessToken': user.accessToken,
-      'facebookId': user.googleId,
+      'googleId': user.googleId,
       'displayName':user.displayName,
        'email':user.email,
     };
