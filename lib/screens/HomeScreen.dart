@@ -5,8 +5,7 @@ import '../components/AppDrawer.dart';
 
 import '../backend/httpController/AuthController.dart';
 
-import '../backend/Models/SignUpUser.dart';
-import '../backend/Models/loginUser.dart';
+import '../backend/bloc/FacebookCubit.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -81,7 +80,17 @@ class HomeScreen extends StatelessWidget {
               onTap: (){},
               child: new ListTile(title: Text('Settings'),
                 leading: Icon(Icons.settings),),
-            )
+            ),
+
+             InkWell(
+              onTap: (){
+                 FacebookCubit cubit=FacebookCubit();
+                 cubit.logOut();
+              },
+              child: new ListTile(title: Text('LogOut'),
+                leading: Icon(Icons.settings),),
+            ),
+            
 
           ],
         ),

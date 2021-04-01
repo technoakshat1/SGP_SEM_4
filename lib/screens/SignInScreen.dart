@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_app/backend/bloc/facebook_cubit.dart';
-import 'package:recipe_app/components/FacebookDialogueBox.dart';
+import 'package:recipe_app/backend/bloc/OAuthInterface.dart';
+import 'package:recipe_app/backend/bloc/FacebookCubit.dart';
 
 //components
 import '../components/TextOnlyFieldCircular.dart';
@@ -113,17 +113,17 @@ class _SignInScreenState extends State<SignInScreen> {
       body: SingleChildScrollView(
         child:MultiBlocListener(
           listeners: [
-            BlocListener<FacebookCubit,FacebookAuthStatus>(
+            BlocListener<FacebookCubit,dynamic>(
                cubit: cubitC,
               listener: (ctx,state){
-                 if(state==FacebookAuthStatus.SingUp){
+                 if(state==FacebookAuthStatus.SignUp){
                    setState(() {
                      status=OAuthLoginOrSignUp.SignUp;
                    });
                    showDialog(
                      context: context,
-                     builder: (ctx)=>FacebookDialogueBox(
-                       cubitA: cubitC,
+                     builder: (ctx)=>OAuthSignUpDialog(
+                       cubit: cubitC,
                      ),
                    );
                  }else if(state==FacebookAuthStatus.Authenticated){
@@ -136,7 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
                  }
               },
             ),
-            BlocListener<GoogleCubit,GoogleLoginStatus>(
+            BlocListener<GoogleCubit,dynamic>(
               cubit: cubitB,
               listener: (ctx, state) {
                 //print(state);
@@ -147,7 +147,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   showDialog(
                     context: context,
                     builder: (ctx) => OAuthSignUpDialog(
-                      cubitA: cubitB,
+                      cubit: cubitB,
                     ),
                   );
                 } else if (state == GoogleLoginStatus.Authenticated) {

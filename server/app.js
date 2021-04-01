@@ -24,9 +24,9 @@ mongoose.connect("mongodb://localhost:27017/userDb1", {
 mongoose.set("useCreateIndex", true);
 app.use(passport.initialize());
 
-const router = buildRouter();
+const authAPIRouter = buildRouter();
 
-app.use(router);
+app.use("/auth",authAPIRouter);
 
 app.listen(3000, function (req, res) {
   console.log("Server started at http://localhost:3000");

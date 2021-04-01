@@ -5,7 +5,6 @@ export default function buildMakeFacebookUser() {
       photoUrl,
       facebookId,
       displayName,
-      accessToken,
     }) {
       if (username == null) {
         throw new Error("username_empty");
@@ -27,17 +26,13 @@ export default function buildMakeFacebookUser() {
         throw new Error("facebookId_empty");
       }
   
-      if(accessToken==null||accessToken.length==0){
-        throw new Error("password_empty");
-      }
-  
+     
       return Object.freeze({
         username,
         email,
         photoUrl,
         facebookId,
         displayName,
-        facebookAccessToken:accessToken,
       });
     };
   }

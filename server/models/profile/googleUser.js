@@ -5,7 +5,6 @@ export default function buildMakeGoogleUser() {
     photoUrl,
     googleId,
     displayName,
-    accessToken,
   }) {
     if (username == null) {
       throw new Error("username_empty");
@@ -27,9 +26,6 @@ export default function buildMakeGoogleUser() {
       throw new Error("googleId_empty");
     }
 
-    if(accessToken==null||accessToken.length==0){
-      throw new Error("password_empty");
-    }
 
     return Object.freeze({
       username,
@@ -37,7 +33,6 @@ export default function buildMakeGoogleUser() {
       photoUrl,
       googleId,
       displayName,
-      googleAccessToken:accessToken,
     });
   };
 }

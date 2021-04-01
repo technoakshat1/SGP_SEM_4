@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //route
 import './HomeScreen.dart';
 
-//Models
+//blocs
 import '../backend/bloc/SignUpCubit.dart';
 import '../backend/bloc/GoogleCubit.dart';
+import '../backend/bloc/FacebookCubit.dart';
 
 //Components
 import '../components/DefaultPageTransition.dart';
@@ -32,6 +33,12 @@ class SignUpLoadingScreen extends StatelessWidget {
           }
           if(state is GoogleLoginStatus){
              if(state==GoogleLoginStatus.Authenticated){
+              DefaultPageTransition transition=DefaultPageTransition(HomeScreen());
+              Navigator.of(ctx).pushReplacement(transition.createRoute());
+            }
+          }
+          if(state is FacebookAuthStatus){
+            if(state==FacebookAuthStatus.Authenticated){
               DefaultPageTransition transition=DefaultPageTransition(HomeScreen());
               Navigator.of(ctx).pushReplacement(transition.createRoute());
             }

@@ -1,7 +1,7 @@
 export default function buildGoogleUserExists(userDb){
-    return async function googleUserExists(httpBody){
+    return async function googleUserExists(googleId){
         try{
-            let user=await userDb.getGoogleUser(httpBody.googleId);
+            let user=await userDb.getGoogleUser(googleId);
             if(user && user.username){
               return {exists:true,username:user.username};
             }else{

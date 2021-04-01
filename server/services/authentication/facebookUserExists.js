@@ -1,7 +1,7 @@
 export default function buildFacebookUserExists(userDb){
-    return async function facebookUserExists(httpBody){
+    return async function facebookUserExists(facebookId){
         try {
-            let user=await userDb.getFacebookUser(httpBody.facebookId);
+            let user=await userDb.getFacebookUser(facebookId);
             if(user && user.username){
                 return {exists:true, username:user.username};
             }else{

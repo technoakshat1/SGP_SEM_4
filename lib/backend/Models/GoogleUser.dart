@@ -1,4 +1,6 @@
-class GoogleUser {
+import './OAuthUser.dart';
+
+class GoogleUser extends OAuthUser {
   String accessToken;
   String googleId;
   String photoUrl;

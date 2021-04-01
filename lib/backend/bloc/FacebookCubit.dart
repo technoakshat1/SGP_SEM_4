@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:meta/meta.dart';
 import 'package:recipe_app/backend/Models/FacebookUser.dart';
 import 'package:recipe_app/backend/httpController/AuthController.dart';
 import 'package:http/http.dart' as http;
 
-enum FacebookAuthStatus{SingUp,Authenticated,Loading,UnAuthenticated}
+import 'OAuthInterface.dart';
+
+enum FacebookAuthStatus{SignUp,Authenticated,Loading,UnAuthenticated,LogOut}
 
 
-class FacebookCubit extends Cubit<FacebookAuthStatus> {
+class FacebookCubit extends Cubit<dynamic> implements OAuthInterface{
 
   FacebookCubit() : super(FacebookAuthStatus.UnAuthenticated);
   final AuthController _authController=AuthController();
@@ -45,14 +46,15 @@ class FacebookCubit extends Cubit<FacebookAuthStatus> {
           user.photoUrl=profile['picture']['data']['url'];
           user.email=profile['email'];
           user.facebookId=profile['id'];
-          print("User Nai hai re baba");
-          emit(FacebookAuthStatus.SingUp);
+          //print("User Nai hai re baba");
+          emit(FacebookAuthStatus.SignUp);
         }
         else{
-          user.name=user.name=profile['name'];
+          user.username=response.username;
+          user.name=profile['name'];
           user.facebookId=profile['id'];
           user.accessToken=token;
-          print("USer hai re baba");
+          //print("USer hai re baba");
           final login = await _authController.loginFacebookUser(user);
           print(login);
           if (login) {
@@ -75,6 +77,8 @@ class FacebookCubit extends Cubit<FacebookAuthStatus> {
     }
   }
   void logOut() async{
+    await _authController.logout();
     await _facebookLogin.logOut();
+    emit(FacebookAuthStatus.LogOut);
   }
 }

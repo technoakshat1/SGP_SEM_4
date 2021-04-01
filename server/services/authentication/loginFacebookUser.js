@@ -1,23 +1,29 @@
-export default function buildLoginFacebookUser(jwtController, userDb) {
-    return async function loginFacebookUser(httpBody) {
-      try {
-        let user = await userDb.getFacebookUser(httpBody.facebookId);
-  
+export default function buildLoginFacebookUser(
+  jwtController,
+  userDb,
+  verifyFacebookUser
+) {
+  return async function loginFacebookUser(httpBody) {
+    try {
+      let userId = await verifyFacebookUser(httpBody.accessToken);
+
+      if (userId) {
+        let user = await userDb.getFacebookUser(userId);
+
         if (user) {
           if (
             user.username == httpBody.username &&
-            user.facebookAccessToken == httpBody.accessToken
+            user.facebookId == httpBody.facebookId
           ) {
             let token = await jwtController.sign(user.username);
             return { token: token };
-          }else{
-              return {Error:"accessToken_incorrect"};
           }
         }
-      } catch (err) {
-        console.log(err);
-        return { Error: err.message };
       }
-    };
-  }
-  
+      return { Error: "accessToken_incorrect" };
+    } catch (err) {
+      console.error(err);
+      return { Error: err.message };
+    }
+  };
+}

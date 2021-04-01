@@ -10,14 +10,13 @@ import './DefaultPageTransition.dart';
 import '../screens/SignUpLoadingScreen.dart';
 
 //blocs
-import '../backend/bloc/GoogleCubit.dart';
+import '../backend/bloc/OAuthInterface.dart';
 import '../backend/bloc/SignUpCubit.dart';
 
 class OAuthSignUpDialog extends StatefulWidget {
-  OAuthSignUpDialog({Key key, this.cubitA}) : super(key: key);
+  OAuthSignUpDialog({this.cubit});
 
-  final GoogleCubit cubitA;
-
+  final OAuthInterface cubit;
 
   @override
   _OAuthSignUpDialogState createState() => _OAuthSignUpDialogState();
@@ -47,11 +46,11 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        // BlocListener<GoogleCubit, GoogleLoginStatus>(
-        //     cubit: widget.cubitA,
-        //     listener: (ctx, state) {
-        //       //do something
-        //     }),
+        BlocListener<OAuthInterface, dynamic>(
+            cubit: widget.cubit, 
+            listener: (ctx, state) {
+                
+            }),
         BlocListener<SignUpCubit, dynamic>(
           cubit: cubitB,
           listener: (ctx, state) {
@@ -150,11 +149,12 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
                   child: AccentButtonCircular(
                     displayText: 'SignUp',
                     onPress: () {
-                      String username=usernameController.text;
+                      String username = usernameController.text;
                       if (isUsernameAvailable && username.isNotEmpty) {
-                        widget.cubitA.signUp(username);
+                        widget.cubit.signUp(username);
                         DefaultPageTransition transition =
-                            DefaultPageTransition(SignUpLoadingScreen(cubit:widget.cubitA));
+                            DefaultPageTransition(
+                                SignUpLoadingScreen(cubit: widget.cubit));
                         Navigator.of(context)
                             .pushReplacement(transition.createRoute());
                       }
