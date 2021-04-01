@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:recipe_app/backend/Models/FacebookUser.dart';
+import '../Models/authentication/FacebookUser.dart';
 import 'package:recipe_app/backend/httpController/AuthController.dart';
 import 'package:http/http.dart' as http;
 

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 //screens
-import './screens/SignInScreen.dart';
-import './screens/SignInLoadingScreen.dart';
-import './screens/SignUpLoadingScreen.dart';
-import './screens/SignUpScreen.dart';
-import './screens/HomeScreen.dart';
+import 'screens/authentication/SignInScreen.dart';
+import 'screens/authentication/SignUpScreen.dart';
 
 void main() async {
   runApp(MyApp());

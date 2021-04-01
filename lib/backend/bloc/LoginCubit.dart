@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
 //Models
-import '../Models/loginUser.dart';
+import '../Models/authentication/loginUser.dart';
 
 //controllers
 import '../httpController/AuthController.dart';

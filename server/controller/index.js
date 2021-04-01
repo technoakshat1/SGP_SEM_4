@@ -8,10 +8,10 @@ import axios from 'axios';
 dotenv.config();
 
 //controllers
-import buildUserDb from "./userDb.js";
-import buildJwtController from "./jwtController.js";
-import buildGoogleOAuthController from './OAuthGoogleController.js';
-import buildOAuthFacebookController from './OAuthFacebookController.js';
+import buildUserDb from "./authentication/userDb.js";
+import buildJwtController from "./authentication/jwtController.js";
+import buildGoogleOAuthController from './authentication/OAuthGoogleController.js';
+import buildOAuthFacebookController from './authentication/OAuthFacebookController.js';
 
 const userSchema = new mongoose.Schema({
   username: String,

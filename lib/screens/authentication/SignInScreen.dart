@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_app/backend/bloc/OAuthInterface.dart';
 import 'package:recipe_app/backend/bloc/FacebookCubit.dart';
 
 //components
-import '../components/TextOnlyFieldCircular.dart';
-import '../components/PasswordOnlyFieldCircular.dart';
-import '../components/AccentButtonCircular.dart';
-import '../components/DefaultPageTransition.dart';
-import '../components/oAuthUserSignUp.dart';
+import '../../components/authentication/statefulWidgets/TextOnlyFieldCircular.dart';
+import '../../components/authentication/statefulWidgets/PasswordOnlyFieldCircular.dart';
+import '../../components/authentication/statelessWidgets/AccentButtonCircular.dart';
+import '../../components/AnimatedRoutes/DefaultPageTransition.dart';
+import '../../components/authentication/statefulWidgets/oAuthUserSignUp.dart';
 
 //animated page import
-import './SignInLoadingScreen.dart';
+import 'SignInLoadingScreen.dart';
 
 //blocs
-import '../backend/bloc/LoginCubit.dart';
-import '../backend/bloc/GoogleCubit.dart';
+import '../../backend/bloc/LoginCubit.dart';
+import '../../backend/bloc/GoogleCubit.dart';
 //models
-import '../backend/Models/loginUser.dart';
+import '../../backend/Models/authentication/loginUser.dart';
 
-// TODO :
-//         3.make sign in with google working.
-//         4.make continue with facebook working.
 enum OAuthLoginOrSignUp { Login, SignUp }
 
 class SignInScreen extends StatefulWidget {

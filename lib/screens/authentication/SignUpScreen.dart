@@ -4,28 +4,17 @@ import 'package:email_validator/email_validator.dart';
 import 'package:password_strength/password_strength.dart';
 
 //components
-import '../components/TextOnlyFieldCircular.dart';
-import '../components/PasswordOnlyFieldCircular.dart';
-import '../components/AccentButtonCircular.dart';
-import '../components/DefaultPageTransition.dart';
-import '../screens/SignUpLoadingScreen.dart';
+import '../../components/authentication/statefulWidgets/TextOnlyFieldCircular.dart';
+import '../../components/authentication/statefulWidgets/PasswordOnlyFieldCircular.dart';
+import '../../components/authentication/statelessWidgets/AccentButtonCircular.dart';
+import '../../components/AnimatedRoutes/DefaultPageTransition.dart';
+import 'SignUpLoadingScreen.dart';
 
 //blocs
-import '../backend/bloc/SignUpCubit.dart';
+import '../../backend/bloc/SignUpCubit.dart';
 
 //Models
-import '../backend/Models/SignUpUser.dart';
-
-// TODO UI:add warning text for :
-//         1.email field is empty or invalid.
-//         2.username field is not available i.e. already taken or invalid.
-//         3.first name last name empty or invalid.
-//         4.password strength check and warning.
-//         5.add bacl button to appbar.
-//       Function:
-//         1.connect and get user inputs from diffrent inputs using bloc.
-//         2.make create button working.
-//         3.make back button working i.e it takes back to sign in screen.
+import '../../backend/Models/authentication/SignUpUser.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key key}) : super(key: key);

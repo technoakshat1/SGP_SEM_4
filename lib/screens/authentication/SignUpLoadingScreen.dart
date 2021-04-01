@@ -3,15 +3,15 @@ import 'package:lottie/lottie.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //route
-import './HomeScreen.dart';
+import '../HomeScreen.dart';
 
 //blocs
-import '../backend/bloc/SignUpCubit.dart';
-import '../backend/bloc/GoogleCubit.dart';
-import '../backend/bloc/FacebookCubit.dart';
+import '../../backend/bloc/SignUpCubit.dart';
+import '../../backend/bloc/GoogleCubit.dart';
+import '../../backend/bloc/FacebookCubit.dart';
 
 //Components
-import '../components/DefaultPageTransition.dart';
+import '../../components/AnimatedRoutes/DefaultPageTransition.dart';
 
 class SignUpLoadingScreen extends StatelessWidget {
   const SignUpLoadingScreen({Key key,this.cubit}) : super(key: key);

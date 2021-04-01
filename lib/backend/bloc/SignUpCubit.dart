@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import '../httpController/AuthController.dart';
 
 //Models
-import '../Models/SignUpUser.dart';
+import '../Models/authentication/SignUpUser.dart';
 
 enum SignUpStatus { Successfull, UnSuccessfull, Loading, Pending }
 enum UsernameAvailability{Available,UnAvailable,Loading}

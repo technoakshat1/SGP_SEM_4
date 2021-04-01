@@ -2,16 +2,16 @@ import 'package:flutter/Material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 //components
-import './TextOnlyFieldCircular.dart';
-import './AccentButtonCircular.dart';
-import './DefaultPageTransition.dart';
+import 'TextOnlyFieldCircular.dart';
+import '../statelessWidgets/AccentButtonCircular.dart';
+import '../../AnimatedRoutes/DefaultPageTransition.dart';
 
 //screens
-import '../screens/SignUpLoadingScreen.dart';
+import '../../../screens/authentication/SignUpLoadingScreen.dart';
 
 //blocs
-import '../backend/bloc/OAuthInterface.dart';
-import '../backend/bloc/SignUpCubit.dart';
+import '../../../backend/bloc/OAuthInterface.dart';
+import '../../../backend/bloc/SignUpCubit.dart';
 
 class OAuthSignUpDialog extends StatefulWidget {
   OAuthSignUpDialog({this.cubit});

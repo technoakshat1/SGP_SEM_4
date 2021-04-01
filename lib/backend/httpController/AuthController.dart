@@ -1,14 +1,14 @@
 import 'package:http/http.dart' as http;
-import 'package:recipe_app/backend/Models/FacebookUser.dart';
 
 
 //parent
 import './httpMain.dart';
 
 //models
-import '../Models/loginUser.dart';
-import '../Models/SignUpUser.dart';
-import '../Models/GoogleUser.dart';
+import '../Models/authentication/loginUser.dart';
+import '../Models/authentication/SignUpUser.dart';
+import '../Models/authentication/GoogleUser.dart';
+import '../Models/authentication/FacebookUser.dart';
 
 class AuthController extends HttpMain {
   String authUrl;

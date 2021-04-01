@@ -1,5 +1,3 @@
-import 'package:recipe_app/backend/Models/OAuthUser.dart';
-
 import './OAuthUser.dart'; 
 
 class FacebookUser extends OAuthUser{

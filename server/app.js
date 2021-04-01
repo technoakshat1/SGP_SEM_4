@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 const express = require("express");
-import buildRouter from "./routes/router.js";
+import buildRouter from "./routes/authV1Router.js";
 import bodyParser from "body-parser";
 import passport from "passport";
 import passportLocalMongoose from "passport-local-mongoose";

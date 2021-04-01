@@ -6,7 +6,7 @@ import './OAuthInterface.dart';
 import '../httpController/AuthController.dart';
 
 //models
-import '../Models/GoogleUser.dart';
+import '../Models/authentication/GoogleUser.dart';
 
 enum GoogleLoginStatus { SignUp, Authenticated, Loading, UnAuthenticated }
 

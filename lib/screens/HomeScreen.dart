@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //components
-import '../components/AppDrawer.dart';
+import '../components/essentials/statelessWidgets/AppDrawer.dart';
 
 import '../backend/httpController/AuthController.dart';
 
