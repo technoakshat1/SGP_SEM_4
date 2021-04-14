@@ -2,29 +2,35 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class AccentButtonCircular extends StatelessWidget {
-  AccentButtonCircular({Key key,this.displayText,this.onPress}) : super(key: key);
-  
+  AccentButtonCircular({Key key, this.displayText, this.onPress})
+      : super(key: key);
+
   final String displayText;
   Function onPress;
 
   @override
   Widget build(BuildContext context) {
-    
-    if(onPress==null){
-      onPress=(){};
+    if (onPress == null) {
+      onPress = () {};
     }
 
-    return RaisedButton(
+    return ElevatedButton(
       child: Text(
         displayText,
         style: Theme.of(context).primaryTextTheme.button,
       ),
       onPressed: onPress,
-      color: Theme.of(context).accentColor,
-      splashColor: Colors.black26,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(50),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (states) => Theme.of(context).accentColor),
+        overlayColor:
+            MaterialStateProperty.resolveWith<Color>((state) => Colors.black26),
+        shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+          (states) => RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(50),
+            ),
+          ),
         ),
       ),
     );

@@ -47,10 +47,7 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
     return MultiBlocListener(
       listeners: [
         BlocListener<OAuthInterface, dynamic>(
-            cubit: widget.cubit, 
-            listener: (ctx, state) {
-                
-            }),
+            cubit: widget.cubit, listener: (ctx, state) {}),
         BlocListener<SignUpCubit, dynamic>(
           cubit: cubitB,
           listener: (ctx, state) {
@@ -76,15 +73,19 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
         ),
       ],
       child: SimpleDialog(
-        title: Text('Welcome to Kitchen Cloud!'),
-        titlePadding: EdgeInsets.all(0),
+        title: Text(
+          'Welcome to Kitchen Cloud!',
+          textAlign: TextAlign.center,
+        ),
+        titlePadding: EdgeInsets.all(5),
         contentPadding: EdgeInsets.all(5),
         children: [
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: Text(
               'Looks like you are new to Kitchen Cloud!\nPlease enter an appropriate username to continue!',
               style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.center,
             ),
           ),
           Container(

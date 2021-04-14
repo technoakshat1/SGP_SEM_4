@@ -39,4 +39,14 @@ class LoginCubit extends Cubit<LoginStatus> {
       }
     }
   }
+
+  void isAuthenticated() async {
+    bool isAuthenticated = await Future.delayed(
+        Duration(seconds: 5), () => controller.isAuthenticated());
+    if (isAuthenticated) {
+      emit(LoginStatus.Authenticated);
+    } else {
+      emit(LoginStatus.unAuthenticated);
+    }
+  }
 }

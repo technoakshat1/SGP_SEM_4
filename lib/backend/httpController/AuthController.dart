@@ -17,7 +17,7 @@ class AuthController extends HttpMain {
      authUrl=super.url+"/auth/v1";
    }
 
-  Future<dynamic> isAuthenticated() async {
+  Future<bool> isAuthenticated() async {
     String token = await super.storedToken;
     String uri = authUrl + "/login";
 
@@ -26,7 +26,7 @@ class AuthController extends HttpMain {
     return super.responseFieldExtractor(
       response,
       field: 'authenticated',
-      onResponseError: (error) => error,
+      onResponseError: (error) => false,
       onServerError: (_) => false,
     );
   }

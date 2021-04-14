@@ -59,6 +59,16 @@ export default function buildUserDb(userModel, jwtController) {
     return facebookUser;
   }
 
+  async function getNetworkRepoId(username){
+    let networkRepoId=await userModel.findOne({username:username},'networkRepoId');
+    return networkRepoId;
+  }
+
+  async function getPostsRecordId(username){
+    let postsRecordId=await userModel.findOne({username:username},'postsRecordId');
+    return postsRecordId;
+  }
+
   return Object.freeze({
     register: register,
     exists: exists,
@@ -67,5 +77,7 @@ export default function buildUserDb(userModel, jwtController) {
     getFacebookUser:getFacebookUser,
     registerGoogleUser:registerGoogleUser,
     registerFacebookUser:registerFacebookUser,
+    getNetworkRepoId:getNetworkRepoId,
+    getPostsRecordId:getPostsRecordId,
   });
 }

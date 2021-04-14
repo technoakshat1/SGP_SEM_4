@@ -1,11 +1,16 @@
 import dotenv from "dotenv";
 const express = require("express");
-import buildRouter from "./routes/authV1Router.js";
 import bodyParser from "body-parser";
 import passport from "passport";
 import passportLocalMongoose from "passport-local-mongoose";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+
+//routers
+import buildRouter from "./routes/authV1Router.js";
+import buildPostsRouter from "./routes/postsV1Router.js";
+import buildNetworkRouter from "./routes/networkV1Router.js";
+import buildLikesRouter from "./routes/likesV1Router.js";
 
 dotenv.config();
 
@@ -25,8 +30,14 @@ mongoose.set("useCreateIndex", true);
 app.use(passport.initialize());
 
 const authAPIRouter = buildRouter();
+const postsAPIRouter=buildPostsRouter();
+const networkAPIRouter=buildNetworkRouter();
+const likesAPIRouter=buildLikesRouter();
 
 app.use("/auth",authAPIRouter);
+app.use("/posts",postsAPIRouter);
+app.use("/network",networkAPIRouter);
+app.use("/likes",likesAPIRouter);
 
 app.listen(3000, function (req, res) {
   console.log("Server started at http://localhost:3000");

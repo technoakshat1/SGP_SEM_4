@@ -8,7 +8,7 @@ export default function buildIsAuthenticated(jwtController, userDb) {
       let doesExist = await userDb.exists(verifiedUser);
       //console.log(doesExist);
        if(object){
-         return Object.freeze({ authenticated: doesExist });
+         return Object.freeze({ authenticated: doesExist,username:verifiedUser });
        }else{
          return true;
        }

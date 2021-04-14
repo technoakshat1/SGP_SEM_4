@@ -1,0 +1,80 @@
+import {
+  isAuthenticated,
+  createPost,
+  getPostByUserId,
+  getLatestPostsByUserId,
+  getLatestPostsByUserIds,
+  getPostsByQuery,
+  getPostsByCategories,
+  getPostsByFilters,
+  getPostsByCategoryAndFilters,
+} from "../services/index.js";
+const express = require("express");
+
+export default function buildPostRouter() {
+  const router = express.Router();
+
+  router.get("/v1/posts", async (req, res) => {
+    let isAuth = await isAuthenticated(req.headers.authorization, true);
+    if (isAuth && isAuth.authenticated) {
+        //console.log(req.query);
+      if (req.query.q || req.query.cat || req.query.filter) {
+          let searchQuery=req.query.q;
+          let category=req.query.cat;
+          let filter=req.query.filter;
+          if(searchQuery){
+              let posts=await getPostsByQuery(searchQuery);
+              res.json(posts);
+          }else if(category && filter){
+            let posts=await getPostsByCategoryAndFilters(category,filter);
+            res.json(posts);
+          }else if(category){
+            console.log(category);
+            let posts=await getPostsByCategories(category);
+            res.json(posts);
+          }else if(filter){
+            let posts=await getPostsByFilters(filter);
+            res.json(posts);
+          }
+      } else {
+        let posts = await getLatestPostsByUserIds(isAuth.username);
+        res.json(posts);
+      }
+    } else {
+      res.sendStatus(403);
+    }
+  });
+
+  router.get("/v1/posts/:userId", async (req, res) => {
+    let isAuth = await isAuthenticated(req.headers.authorization, true);
+    if (isAuth && isAuth.authenticated) {
+      let post = await getLatestPostsByUserId(req.params.userId);
+      res.json(post);
+    } else {
+      res.sendStatus(403);
+    }
+  });
+
+  router.get("/v1/post/:userId", async (req, res) => {
+    let isAuth = await isAuthenticated(req.headers.authorization, true);
+    if (isAuth && isAuth.authenticated) {
+      let post = await getPostByUserId(req.params.userId);
+      res.json(post);
+    } else {
+      res.sendStatus(403);
+    }
+  });
+
+  router.post("/v1/post", async (req, res) => {
+    let isAuth = await isAuthenticated(req.headers.authorization, true);
+    //console.log(isAuth);
+    if (isAuth && isAuth.authenticated) {
+      let post = await createPost(isAuth.username, req.body);
+      res.json(post);
+    } else {
+      res.sendStatus(403);
+    }
+  });
+
+  return router;
+}

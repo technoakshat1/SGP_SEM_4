@@ -33,11 +33,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final LoginCubit cubitA = LoginCubit();
   final GoogleCubit cubitB = GoogleCubit();
-  final FacebookCubit cubitC=FacebookCubit();
+  final FacebookCubit cubitC = FacebookCubit();
 
   bool isUsernameValid = true;
   bool isPasswordValid = true;
-  OAuthLoginOrSignUp status=OAuthLoginOrSignUp.Login;
+  OAuthLoginOrSignUp status = OAuthLoginOrSignUp.Login;
 
   @override
   void dispose() {
@@ -107,38 +107,39 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child:MultiBlocListener(
+        child: MultiBlocListener(
           listeners: [
-            BlocListener<FacebookCubit,dynamic>(
-               cubit: cubitC,
-              listener: (ctx,state){
-                 if(state==FacebookAuthStatus.SignUp){
-                   setState(() {
-                     status=OAuthLoginOrSignUp.SignUp;
-                   });
-                   showDialog(
-                     context: context,
-                     builder: (ctx)=>OAuthSignUpDialog(
-                       cubit: cubitC,
-                     ),
-                   );
-                 }else if(state==FacebookAuthStatus.Authenticated){
-                   if(status==OAuthLoginOrSignUp.Login){
-                     DefaultPageTransition transition=DefaultPageTransition(SignInLoadingScreen());
-                     Navigator.of(ctx).pushReplacement(transition.createRoute());
-                   }else{
-                     Navigator.of(ctx).pop();
-                   }
-                 }
+            BlocListener<FacebookCubit, dynamic>(
+              cubit: cubitC,
+              listener: (ctx, state) {
+                if (state == FacebookAuthStatus.SignUp) {
+                  setState(() {
+                    status = OAuthLoginOrSignUp.SignUp;
+                  });
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => OAuthSignUpDialog(
+                      cubit: cubitC,
+                    ),
+                  );
+                } else if (state == FacebookAuthStatus.Authenticated) {
+                  if (status == OAuthLoginOrSignUp.Login) {
+                    DefaultPageTransition transition =
+                        DefaultPageTransition(SignInLoadingScreen());
+                    Navigator.of(ctx).pushReplacement(transition.createRoute());
+                  } else {
+                    Navigator.of(ctx).pop();
+                  }
+                }
               },
             ),
-            BlocListener<GoogleCubit,dynamic>(
+            BlocListener<GoogleCubit, dynamic>(
               cubit: cubitB,
               listener: (ctx, state) {
                 //print(state);
                 if (state == GoogleLoginStatus.SignUp) {
                   setState(() {
-                    status=OAuthLoginOrSignUp.SignUp;
+                    status = OAuthLoginOrSignUp.SignUp;
                   });
                   showDialog(
                     context: context,
@@ -147,11 +148,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   );
                 } else if (state == GoogleLoginStatus.Authenticated) {
-                  if(status==OAuthLoginOrSignUp.Login){
+                  if (status == OAuthLoginOrSignUp.Login) {
                     DefaultPageTransition transition =
-                    DefaultPageTransition(SignInLoadingScreen());
+                        DefaultPageTransition(SignInLoadingScreen());
                     Navigator.of(ctx).pushReplacement(transition.createRoute());
-                  }else{
+                  } else {
                     Navigator.of(ctx).pop();
                   }
                 }
@@ -163,7 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
             listener: (ctx, state) {
               if (state == LoginStatus.Authenticated) {
                 DefaultPageTransition transition =
-                DefaultPageTransition(SignInLoadingScreen());
+                    DefaultPageTransition(SignInLoadingScreen());
                 Navigator.of(ctx).pushReplacement(transition.createRoute());
               } else if (state == LoginStatus.PasswordIncorrect) {
                 setState(() {
@@ -192,9 +193,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     textController: usernameController,
                     labelText: 'Username',
                     labelFocusColor:
-                    !isUsernameValid ? Colors.red : Color(0xffaf0069),
+                        !isUsernameValid ? Colors.red : Color(0xffaf0069),
                     labelUnfocusedColor:
-                    !isUsernameValid ? Colors.red : Colors.grey,
+                        !isUsernameValid ? Colors.red : Colors.grey,
                     onChange: validateUsername,
                   ),
                 ),
@@ -217,9 +218,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     textController: passwordController,
                     labelText: 'Password',
                     labelFocusColor:
-                    !isPasswordValid ? Colors.red : Color(0xffaf0069),
+                        !isPasswordValid ? Colors.red : Color(0xffaf0069),
                     labelUnfocusedColor:
-                    !isPasswordValid ? Colors.red : Colors.grey,
+                        !isPasswordValid ? Colors.red : Colors.grey,
                     onChange: validatePassword,
                   ),
                 ),
@@ -268,11 +269,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   width: 300,
                   height: 40,
                   margin: EdgeInsets.only(top: 20),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       cubitB.authenticate();
                     },
-                    splashColor: Colors.black26,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -290,23 +290,30 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ],
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(50),
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.resolveWith<Color>(
+                          (states) => Colors.black26),
+                      shape: MaterialStateProperty.resolveWith<
+                          RoundedRectangleBorder>(
+                        (state) => RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                        ),
                       ),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (states) => Colors.red),
                     ),
-                    color: Colors.red,
                   ),
                 ),
                 Container(
                   width: 300,
                   height: 40,
                   margin: EdgeInsets.only(top: 20),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       cubitC.authenticate();
                     },
-                    splashColor: Colors.black26,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -317,33 +324,48 @@ class _SignInScreenState extends State<SignInScreen> {
                         Container(
                           margin: EdgeInsets.only(left: 20),
                           child: Text(
-                            'Continue with facebook',
+                            'Continue with Facebook',
                             //style: Theme.of(context).primaryTextTheme.button,
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         ),
                       ],
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(50),
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.resolveWith<Color>(
+                          (states) => Colors.black26),
+                      shape: MaterialStateProperty.resolveWith<
+                          RoundedRectangleBorder>(
+                        (state) => RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                        ),
                       ),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (state) => Color(0xff1877f2)),
                     ),
-                    color: Color(0xff1877f2),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed('/createKitchen');
                     },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.resolveWith<
+                          RoundedRectangleBorder>(
+                        (states) => RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
                       ),
-                      side: BorderSide(
-                        color: Theme.of(context).primaryColor,
+                      side: MaterialStateProperty.resolveWith<BorderSide>(
+                        (state) => BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                     child: Text(
@@ -351,6 +373,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
+                        color: Theme.of(context).textTheme.headline5.color,
                       ),
                     ),
                   ),
@@ -358,9 +381,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ],
             ),
           ),
-
         ),
-
       ),
     );
   }

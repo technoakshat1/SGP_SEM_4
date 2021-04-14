@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_app/screens/HomeScreen.dart';
+
+//blocs
+import './backend/bloc/LoginCubit.dart';
 
 //screens
 import 'screens/authentication/SignInScreen.dart';
 import 'screens/authentication/SignUpScreen.dart';
+import './screens/authentication/WelcomeScreen.dart';
 
 void main() async {
   runApp(MyApp());
@@ -21,7 +27,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Color(0xff054407),
         accentColor: Color(0xfff6c065),
         primaryTextTheme: TextTheme(
-          button: TextStyle(color: Colors.black,fontSize:18),
+          button: TextStyle(color: Colors.black, fontSize: 18),
           headline5: TextStyle(color: Colors.black),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -37,15 +43,23 @@ class MyApp extends StatelessWidget {
         accentColor: Color(0xfff6c065),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primaryTextTheme: TextTheme(
-          button: TextStyle(color: Colors.black,fontSize:18),
-          headline5: TextStyle(color:Colors.white),
+          button: TextStyle(color: Colors.black, fontSize: 18),
+          headline5: TextStyle(color: Colors.white),
         ),
         iconTheme: IconThemeData(color: Colors.white),
       ),
+      // home:HomeScreen(),
+      home: BlocProvider(
+        create: (ctx){
+          LoginCubit cubit=LoginCubit();
+          cubit.isAuthenticated();
+          return cubit;
+        },
+        child: WelcomeScreen(),
+      ),
       routes: {
-        '/':(context)=>SignInScreen(),
-        '/createKitchen':(context)=>SignUpScreen(),
-        
+        '/login': (context) => SignInScreen(),
+        '/createKitchen': (context) => SignUpScreen(),
       },
     );
   }

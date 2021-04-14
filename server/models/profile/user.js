@@ -7,6 +7,8 @@ export default function buildMakeUser() {
     photoUrl = "",
     googleId = "",
     facebookId = "",
+    postsRecordId,
+    networkRepoId,
   }) {
     //console.log(lastName+email);
     if (!username) {
@@ -53,14 +55,17 @@ export default function buildMakeUser() {
       throw new Error("lastname_outOfRange");
     }
 
-    return Object.freeze({
+    let displayName=firstName+" "+lastName;
+
+    return Object({
       username,
       email,
-      firstName,
-      lastName,
+      displayName,
       photoUrl,
       googleId,
       facebookId,
+      postsRecordId,
+      networkRepoId,
     });
   };
 }

@@ -5,6 +5,8 @@ export default function buildMakeGoogleUser() {
     photoUrl,
     googleId,
     displayName,
+    postsRecordId,
+    networkRepoId,
   }) {
     if (username == null) {
       throw new Error("username_empty");
@@ -26,13 +28,14 @@ export default function buildMakeGoogleUser() {
       throw new Error("googleId_empty");
     }
 
-
-    return Object.freeze({
+    return Object({
       username,
       email,
       photoUrl,
       googleId,
       displayName,
+      postsRecordId,
+      networkRepoId,
     });
   };
 }
