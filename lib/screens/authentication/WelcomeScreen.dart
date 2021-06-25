@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_app/screens/HomeScreen.dart';
 
 //bloc
 import '../../backend/bloc/LoginCubit.dart';
@@ -26,7 +27,7 @@ class WelcomeScreen extends StatelessWidget {
         listener: (ctx, state) {
           if (state == LoginStatus.Authenticated) {
             DefaultPageTransition transition =
-                DefaultPageTransition(SignInLoadingScreen());
+                DefaultPageTransition(HomeScreen());
             Navigator.of(ctx).pushReplacement(transition.createRoute());
           } else {
             Navigator.of(ctx).pushReplacementNamed('/login');

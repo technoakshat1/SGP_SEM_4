@@ -17,6 +17,7 @@ import buildUsernameAvailable from "./authentication/username_available.js";
 import buildCreateGoogleUser from "./createUser/createGoogleUser.js";
 import buildLoginGoogleUser from "./authentication/loginGoogleUser.js";
 import buildGoogleUserExists from "./authentication/googleUserExists.js";
+import buildGetUserDetails from "./authentication/getUserDetails.js";
 
 import buildCreateFacebookUser from "./createUser/createFacebookUser.js";
 import buildLoginFacebookUser from "./authentication/loginFacebookUser.js";
@@ -37,6 +38,7 @@ import buildUnfollow from "./network/unfollow.js";
 import buildLike from "./likes/like.js";
 import buildUnlike from "./likes/unLike.js";
 import buildGetLikedBy from "./likes/getLikedBy.js";
+import buildHasUserLiked from "./likes/hasUserLiked.js";
 
 
 export const isAuthenticated = buildIsAuthenticated(jwtController, userDb);
@@ -47,6 +49,7 @@ export const createUser = buildCreateUser(
 );
 export const login = buildLogin(userDb);
 export const usernameAvailable = buildUsernameAvailable(userDb);
+export const getUserDetails=buildGetUserDetails(userDb);
 export const createGoogleUser = buildCreateGoogleUser(
   jwtController,
   userDb,
@@ -89,3 +92,4 @@ export const unfollow=buildUnfollow(networkController);
 export const like=buildLike(likesController);
 export const unlike=buildUnlike(likesController);
 export const getLikedBy=buildGetLikedBy(likesController);
+export const hasUserLiked=buildHasUserLiked(likesController);

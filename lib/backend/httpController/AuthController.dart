@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 
-
 //parent
 import './httpMain.dart';
 
@@ -9,13 +8,60 @@ import '../Models/authentication/loginUser.dart';
 import '../Models/authentication/SignUpUser.dart';
 import '../Models/authentication/GoogleUser.dart';
 import '../Models/authentication/FacebookUser.dart';
+import "../Models/authentication/DisplayUser.dart";
 
 class AuthController extends HttpMain {
   String authUrl;
-   
-   AuthController(){
-     authUrl=super.url+"/auth/v1";
-   }
+
+  AuthController() {
+    authUrl = super.url + "/auth/v1";
+  }
+
+  Future<DisplayUser> getCurrentUser() async{
+    String uri =
+        authUrl + "/user?details=username&details=photoUrl&details=displayName";
+    String token = await super.storedToken;
+    Map<String, String> headers = {"Authorization": "Bearer $token"};
+    dynamic response = await http.get(uri, headers: headers);
+    dynamic rawResponse = super.responseFieldExtractor(
+      response,
+      field: "user",
+      onResponseError: (_) => null,
+      onServerError: (_) => null,
+    );
+    
+    DisplayUser user=DisplayUser();
+
+    //print(rawResponse['photoUrl']);
+
+    user.username=rawResponse['username'];
+    user.photoUrl=rawResponse['photoUrl'];
+    user.displayName=rawResponse['displayName'];
+    return user;
+  }
+
+  Future<DisplayUser> getUserDetails(String username) async {
+    String uri =
+        authUrl + "/user/$username?details=username&details=photoUrl&details=displayName";
+    String token = await super.storedToken;
+    Map<String, String> headers = {"Authorization": "Bearer $token"};
+    dynamic response = await http.get(uri, headers: headers);
+    dynamic rawResponse = super.responseFieldExtractor(
+      response,
+      field: "user",
+      onResponseError: (_) => null,
+      onServerError: (_) => null,
+    );
+    
+    DisplayUser user=DisplayUser();
+
+    //print(rawResponse['photoUrl']);
+
+    user.username=rawResponse['username'];
+    user.photoUrl=rawResponse['photoUrl'];
+    user.displayName=rawResponse['displayName'];
+    return user;
+  }
 
   Future<bool> isAuthenticated() async {
     String token = await super.storedToken;
@@ -63,7 +109,7 @@ class AuthController extends HttpMain {
 
   Future<bool> usernameAvailable(String username) async {
     //print(body);
-    String uri = authUrl + "/username_available/"+username;
+    String uri = authUrl + "/username_available/" + username;
     final response = await http.get(uri);
     return super.responseFieldExtractor(response,
         field: 'isAvailable',
@@ -95,7 +141,7 @@ class AuthController extends HttpMain {
   }
 
   Future<GoogleUser> googleUserExists(String id) async {
-    String uri = authUrl + "/google/"+id;
+    String uri = authUrl + "/google/" + id;
     final response = await http.get(uri);
     bool exists = super.responseFieldExtractor(response,
         field: 'exists',
@@ -106,23 +152,22 @@ class AuthController extends HttpMain {
       user.username = super.responseFieldExtractor(
         response,
         field: 'username',
-        onResponseError: (_)=>null,
-        onServerError: (_)=>null,
+        onResponseError: (_) => null,
+        onServerError: (_) => null,
       );
       return user;
     }
     return null;
   }
 
-
   Future<bool> signUpGoogleUser(GoogleUser user) async {
     Map<String, String> body = {
       'username': user.username,
-      'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
+      'photoUrl': user.photoUrl != null ? user.photoUrl : 'photoUrl',
       'accessToken': user.accessToken,
       'googleId': user.googleId,
-      'displayName':user.displayName,
-       'email':user.email,
+      'displayName': user.displayName,
+      'email': user.email,
     };
 
     String uri = authUrl + "/google/signUp";
@@ -148,48 +193,50 @@ class AuthController extends HttpMain {
       'accessToken': user.accessToken,
     };
     //print(isTokenValid);
-      String uri = authUrl + "/google/login";
-      final response = await http.post(uri, body: body);
-      String token = super.responseFieldExtractor(response,
-          field: 'token',
-          onResponseError: (_) => null,
-          onServerError: (_) => null);
-      if (token != null) {
-        await super.setToken(token);
-        return true;
-      }
+    String uri = authUrl + "/google/login";
+    final response = await http.post(uri, body: body);
+    String token = super.responseFieldExtractor(response,
+        field: 'token',
+        onResponseError: (_) => null,
+        onServerError: (_) => null);
+    if (token != null) {
+      await super.setToken(token);
+      return true;
+    }
 
-      return false;
+    return false;
   }
-  
-  Future<FacebookUser> facebookUserExists(String id) async{
-    String uri = authUrl + "/facebook/"+id;
-    final response=await http.get(uri);
-    bool exists=super.responseFieldExtractor(response,
+
+  Future<FacebookUser> facebookUserExists(String id) async {
+    String uri = authUrl + "/facebook/" + id;
+    final response = await http.get(uri);
+    bool exists = super.responseFieldExtractor(
+      response,
       field: 'exists',
-      onResponseError: (_)=>false,
-      onServerError: (_)=>false,
+      onResponseError: (_) => false,
+      onServerError: (_) => false,
     );
-    if(exists){
-      FacebookUser user=FacebookUser();
-      user.username=super.responseFieldExtractor(response,
+    if (exists) {
+      FacebookUser user = FacebookUser();
+      user.username = super.responseFieldExtractor(
+        response,
         field: 'username',
-        onResponseError: (_)=>null,
-        onServerError: (_)=>null,
+        onResponseError: (_) => null,
+        onServerError: (_) => null,
       );
       return user;
     }
     return null;
   }
 
-    Future<bool> signUpFacebookUser(FacebookUser user) async {
+  Future<bool> signUpFacebookUser(FacebookUser user) async {
     Map<String, String> body = {
       'username': user.username,
-      'photoUrl': user.photoUrl!=null?user.photoUrl:'photoUrl',
+      'photoUrl': user.photoUrl != null ? user.photoUrl : 'photoUrl',
       'accessToken': user.accessToken,
       'facebookId': user.facebookId,
-      'displayName':user.name,
-      'email':user.email,
+      'displayName': user.name,
+      'email': user.email,
     };
 
     String uri = authUrl + "/facebook/signUp";
@@ -216,18 +263,18 @@ class AuthController extends HttpMain {
       'accessToken': user.accessToken,
     };
     print(body);
-    
-      String uri = authUrl + "/facebook/login";
-      final response = await http.post(uri, body: body);
-      String token = super.responseFieldExtractor(response,
-          field: 'token',
-          onResponseError: (_) => null,
-          onServerError: (_) => null);
-      if (token != null) {
-        await super.setToken(token);
-        return true;
-      }
-  
+
+    String uri = authUrl + "/facebook/login";
+    final response = await http.post(uri, body: body);
+    String token = super.responseFieldExtractor(response,
+        field: 'token',
+        onResponseError: (_) => null,
+        onServerError: (_) => null);
+    if (token != null) {
+      await super.setToken(token);
+      return true;
+    }
+
     return false;
   }
 }

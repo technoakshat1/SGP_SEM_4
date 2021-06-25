@@ -12,10 +12,39 @@ import {
   createFacebookUser,
   loginFacebookUser,
   facebookUserExists,
+  getUserDetails,
 } from "../services/index.js";
 
 export default function buildRouter() {
   const router = express.Router();
+
+  router.get("/v1/user",async (req,res)=>{
+    let isAuth=await isAuthenticated(req.headers.authorization,true);
+    if(isAuth && isAuth.authenticated){
+      if(req.query.details){
+        let userDetails=await getUserDetails(isAuth.username,req.query.details);
+        res.json(userDetails);
+      }else{
+        res.sendStatus(503);
+      }
+    }else{
+      res.sendStatus(403);
+    }
+  });
+  
+   router.get("/v1/user/:username",async (req,res)=>{
+    let isAuth=await isAuthenticated(req.headers.authorization,true);
+    if(isAuth && isAuth.authenticated){
+      if(req.query.details){
+        let userDetails=await getUserDetails(req.params.username,req.query.details);
+        res.json(userDetails);
+      }else{
+        res.sendStatus(503);
+      }
+    }else{
+      res.sendStatus(403);
+    }
+  });
 
   router.get("/v1/username_available/:username", async (req, res) => {
     let isAvailable = await usernameAvailable(req.params.username);

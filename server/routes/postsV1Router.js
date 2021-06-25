@@ -9,6 +9,9 @@ import {
   getPostsByFilters,
   getPostsByCategoryAndFilters,
 } from "../services/index.js";
+
+import {array} from "./recipes.js";
+
 const express = require("express");
 
 export default function buildPostRouter() {
@@ -26,10 +29,12 @@ export default function buildPostRouter() {
               let posts=await getPostsByQuery(searchQuery);
               res.json(posts);
           }else if(category && filter){
+            console.log(filter);
             let posts=await getPostsByCategoryAndFilters(category,filter);
+            //console.log(posts);
             res.json(posts);
           }else if(category){
-            console.log(category);
+            //console.log(category);
             let posts=await getPostsByCategories(category);
             res.json(posts);
           }else if(filter){
@@ -74,6 +79,13 @@ export default function buildPostRouter() {
     } else {
       res.sendStatus(403);
     }
+  });
+
+  router.post("/v1/uploadTest/:username",async (req,res)=>{
+     for(let i=0;i<array.length;i++){
+       let post=await createPost(req.params.username,array[i]);
+       console.log(post);
+     }
   });
 
   return router;

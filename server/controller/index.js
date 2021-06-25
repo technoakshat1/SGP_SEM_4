@@ -48,6 +48,7 @@ const postSchema=new mongoose.Schema({
   categories:[String],
   filters:[String],
   CookingInfo:{
+    persons:Number,
     time:String,
     cost:String,
     ingredients:Array,

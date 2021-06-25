@@ -23,10 +23,16 @@ export default function buildLikesController(LikesRepo){
         return likesRepo.likedBy;
     }
 
+    async function hasUserLiked(postId,userId){
+        let userHasLiked=await LikesRepo.findOne({postId:postId,likedBy:{$in:userId}});
+        return userHasLiked;
+    }
+
     return Object.freeze({
       createLikesRepo:createLikesRepo,
       addLike:addLike,
       removeLike:removeLike,
       getLikedBy:getLikedBy,
+      hasUserLiked:hasUserLiked,
     });
 }

@@ -31,6 +31,8 @@ dependencies:
   email_validator: '^1.0.5'
   password_strength: ^0.1.3
   flutter_facebook_login: ^3.0.0
+  like_button: ^2.0.2
+  flutter_xlider: ^3.4.0
 
   flutter:
     sdk: flutter
@@ -70,6 +72,7 @@ flutter:
     - assets/images/logo_light_theme.png
     - assets/animation/loading_screen_animation.json
     - assets/animation/loading_animation_1.json
+    - assets/animation/namaste_kitchen.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

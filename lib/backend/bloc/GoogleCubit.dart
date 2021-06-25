@@ -18,6 +18,10 @@ class GoogleCubit extends Cubit<dynamic> implements OAuthInterface {
       scopes: ['email','profile']);
   GoogleUser user = GoogleUser();
 
+ void logout(){
+   _googleSignIn.signOut();
+ }
+
   void authenticate() async {
     final googleUser = await _googleSignIn.signIn();
     //print(googleUser.id);

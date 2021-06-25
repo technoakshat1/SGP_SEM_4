@@ -20,6 +20,10 @@ class LoginCubit extends Cubit<LoginStatus> {
 
   AuthController controller = new AuthController();
 
+  void logout(){
+    controller.logout();
+  }
+
   void login(LoginUser user) async {
     emit(LoginStatus.Loading);
     var response = await Future.delayed(
