@@ -15,22 +15,22 @@ enum Error {
 
 class HttpMain {
   static const String pcIpv4 = "192.168.43.157"; //your device IP
-  String url = 'http://$pcIpv4:3000';
+  String url = 'http://$pcIpv4:8000';
   static const String TOKEN = "TOKEN";
-  
-  Future<String> get storedToken async{
-     final SharedPreferences prefs=await SharedPreferences.getInstance();
-     return prefs.getString(TOKEN);
+
+  Future<String> get storedToken async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(TOKEN);
   }
 
-  Future<bool> setToken(String token) async{
-    final SharedPreferences prefs=await SharedPreferences.getInstance();
+  Future<bool> setToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.setString(TOKEN, token);
   }
 
-  Future<bool> removeToken() async{
-    final SharedPreferences prefs=await SharedPreferences.getInstance();
-   return await prefs.remove(TOKEN);
+  Future<bool> removeToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.remove(TOKEN);
   }
 
   Map<dynamic, dynamic> _parseResponse(dynamic res) {
@@ -66,8 +66,8 @@ class HttpMain {
           error = Error.JsonWebTokenError;
           break;
         case "username_duplicate":
-           error=Error.USERNAME_DUPLICATE;
-           break;
+          error = Error.USERNAME_DUPLICATE;
+          break;
       }
 
       return {"error": error};
@@ -78,9 +78,7 @@ class HttpMain {
   }
 
   dynamic responseFieldExtractor(dynamic response,
-      {String field,
-      Function onResponseError,
-      Function onServerError}) {
+      {String field, Function onResponseError, Function onServerError}) {
     if (response.statusCode == 200) {
       final parsedResponse = _parseResponse(response);
       if (parsedResponse["error"] == null) {

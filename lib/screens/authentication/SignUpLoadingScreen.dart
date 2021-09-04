@@ -22,7 +22,7 @@ class SignUpLoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<Cubit,dynamic>(
-        cubit:cubit,
+        bloc:cubit,
         listener: (ctx,state){
           //print(state);
           if(state is SignUpStatus){

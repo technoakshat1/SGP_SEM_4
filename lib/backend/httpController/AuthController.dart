@@ -17,9 +17,9 @@ class AuthController extends HttpMain {
     authUrl = super.url + "/auth/v1";
   }
 
-  Future<DisplayUser> getCurrentUser() async{
-    String uri =
-        authUrl + "/user?details=username&details=photoUrl&details=displayName";
+  Future<DisplayUser> getCurrentUser() async {
+    Uri uri = Uri.parse(authUrl +
+        "/user?details=username&details=photoUrl&details=displayName");
     String token = await super.storedToken;
     Map<String, String> headers = {"Authorization": "Bearer $token"};
     dynamic response = await http.get(uri, headers: headers);
@@ -29,20 +29,20 @@ class AuthController extends HttpMain {
       onResponseError: (_) => null,
       onServerError: (_) => null,
     );
-    
-    DisplayUser user=DisplayUser();
+
+    DisplayUser user = DisplayUser();
 
     //print(rawResponse['photoUrl']);
 
-    user.username=rawResponse['username'];
-    user.photoUrl=rawResponse['photoUrl'];
-    user.displayName=rawResponse['displayName'];
+    user.username = rawResponse['username'];
+    user.photoUrl = rawResponse['photoUrl'];
+    user.displayName = rawResponse['displayName'];
     return user;
   }
 
   Future<DisplayUser> getUserDetails(String username) async {
-    String uri =
-        authUrl + "/user/$username?details=username&details=photoUrl&details=displayName";
+    Uri uri = Uri.parse(authUrl +
+        "/user/$username?details=username&details=photoUrl&details=displayName");
     String token = await super.storedToken;
     Map<String, String> headers = {"Authorization": "Bearer $token"};
     dynamic response = await http.get(uri, headers: headers);
@@ -52,20 +52,20 @@ class AuthController extends HttpMain {
       onResponseError: (_) => null,
       onServerError: (_) => null,
     );
-    
-    DisplayUser user=DisplayUser();
+
+    DisplayUser user = DisplayUser();
 
     //print(rawResponse['photoUrl']);
 
-    user.username=rawResponse['username'];
-    user.photoUrl=rawResponse['photoUrl'];
-    user.displayName=rawResponse['displayName'];
+    user.username = rawResponse['username'];
+    user.photoUrl = rawResponse['photoUrl'];
+    user.displayName = rawResponse['displayName'];
     return user;
   }
 
   Future<bool> isAuthenticated() async {
     String token = await super.storedToken;
-    String uri = authUrl + "/login";
+    Uri uri = Uri.parse(authUrl + "/login");
 
     Map<String, String> header = {"Authorization": "Bearer $token"};
     final response = await http.get(uri, headers: header);
@@ -78,7 +78,7 @@ class AuthController extends HttpMain {
   }
 
   Future<dynamic> login(LoginUser user) async {
-    String uri = authUrl + "/local/login";
+    Uri uri = Uri.parse(authUrl + "/local/login");
 
     Map<String, String> body = {
       'username': user.username,
@@ -109,7 +109,7 @@ class AuthController extends HttpMain {
 
   Future<bool> usernameAvailable(String username) async {
     //print(body);
-    String uri = authUrl + "/username_available/" + username;
+    Uri uri = Uri.parse(authUrl + "/username_available/" + username);
     final response = await http.get(uri);
     return super.responseFieldExtractor(response,
         field: 'isAvailable',
@@ -126,7 +126,7 @@ class AuthController extends HttpMain {
       'lastName': user.lastName
     };
 
-    String uri = authUrl + "/local/signUp";
+    Uri uri = Uri.parse(authUrl + "/local/signUp");
     final response = await http.post(uri, body: body);
     String token = super.responseFieldExtractor(response,
         field: "token",
@@ -141,7 +141,7 @@ class AuthController extends HttpMain {
   }
 
   Future<GoogleUser> googleUserExists(String id) async {
-    String uri = authUrl + "/google/" + id;
+    Uri uri = Uri.parse(authUrl + "/google/" + id);
     final response = await http.get(uri);
     bool exists = super.responseFieldExtractor(response,
         field: 'exists',
@@ -163,14 +163,11 @@ class AuthController extends HttpMain {
   Future<bool> signUpGoogleUser(GoogleUser user) async {
     Map<String, String> body = {
       'username': user.username,
-      'photoUrl': user.photoUrl != null ? user.photoUrl : 'photoUrl',
-      'accessToken': user.accessToken,
+      'token': user.accessToken,
       'googleId': user.googleId,
-      'displayName': user.displayName,
-      'email': user.email,
     };
 
-    String uri = authUrl + "/google/signUp";
+    Uri uri = Uri.parse(authUrl + "/google/username");
     //print(uri);
     final response = await http.post(uri, body: body);
     String token = super.responseFieldExtractor(
@@ -190,10 +187,10 @@ class AuthController extends HttpMain {
     Map<String, String> body = {
       'username': user.username,
       'googleId': user.googleId,
-      'accessToken': user.accessToken,
+      'token': user.accessToken,
     };
     //print(isTokenValid);
-    String uri = authUrl + "/google/login";
+    Uri uri = Uri.parse(authUrl + "/google/login");
     final response = await http.post(uri, body: body);
     String token = super.responseFieldExtractor(response,
         field: 'token',
@@ -208,7 +205,7 @@ class AuthController extends HttpMain {
   }
 
   Future<FacebookUser> facebookUserExists(String id) async {
-    String uri = authUrl + "/facebook/" + id;
+    Uri uri = Uri.parse(authUrl + "/facebook/" + id);
     final response = await http.get(uri);
     bool exists = super.responseFieldExtractor(
       response,
@@ -239,7 +236,7 @@ class AuthController extends HttpMain {
       'email': user.email,
     };
 
-    String uri = authUrl + "/facebook/signUp";
+    Uri uri = Uri.parse(authUrl + "/facebook/signUp");
     //print(uri);
     final response = await http.post(uri, body: body);
     String token = super.responseFieldExtractor(
@@ -264,7 +261,7 @@ class AuthController extends HttpMain {
     };
     print(body);
 
-    String uri = authUrl + "/facebook/login";
+    Uri uri = Uri.parse(authUrl + "/facebook/login");
     final response = await http.post(uri, body: body);
     String token = super.responseFieldExtractor(response,
         field: 'token',

@@ -3,7 +3,7 @@ import './httpMain.dart';
 
 class LikeController extends HttpMain{
   Future<bool> hasUserLiked(postId) async {
-     String uri=super.url+"/likes/v1/hasUserLiked/$postId";
+     Uri uri=Uri.parse(super.url+"/likes/v1/hasUserLiked/$postId");
     String token = await super.storedToken;
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -23,7 +23,7 @@ class LikeController extends HttpMain{
 
 
   Future<bool> like(postId) async {
-    String uri=super.url+"/likes/v1/like/$postId";
+    Uri uri=Uri.parse(super.url+"/likes/v1/like/$postId");
     String token = await super.storedToken;
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -43,7 +43,7 @@ class LikeController extends HttpMain{
   }
 
   Future<bool> unlike(postId) async {
-    String uri=super.url+"/likes/v1/like/$postId";
+    Uri uri=Uri.parse(super.url+"/likes/v1/like/$postId");
     String token = await super.storedToken;
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -63,7 +63,7 @@ class LikeController extends HttpMain{
   }
 
   Future<int> getLikes(postId) async {
-    String uri=super.url+"/likes/v1/likedBy/$postId";
+    Uri uri=Uri.parse(super.url+"/likes/v1/likedBy/$postId");
     String token = await super.storedToken;
     Map<String, String> headers = {
       "Authorization": "Bearer $token",

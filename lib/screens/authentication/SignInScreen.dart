@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:recipe_app/backend/bloc/FacebookCubit.dart';
 
 //components
@@ -38,6 +41,48 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isUsernameValid = true;
   bool isPasswordValid = true;
   OAuthLoginOrSignUp status = OAuthLoginOrSignUp.Login;
+
+  @override
+  void initState() {
+    super.initState();
+    this.initDynamicLinks();
+  }
+
+  void initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+      final Uri deepLink = dynamicLink.link;
+
+      if (deepLink != null) {
+        print("Data of link is " + deepLink.query);
+        print(deepLink.queryParameters['created']);
+
+        bool created =
+            deepLink.queryParameters['created'] == 'true' ? true : false;
+        String username = deepLink.queryParameters['username'];
+        String googleId = deepLink.queryParameters['googleId'];
+        String accessToken = deepLink.queryParameters["token"];
+
+        cubitB.login(created, username, googleId, accessToken);
+      }
+    }, onError: (OnLinkErrorException e) async {
+      print('onLinkError');
+      print(e.message);
+    });
+
+    final PendingDynamicLinkData data =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    if (data != null) {
+      final Uri deepLink = data.link;
+
+      if (deepLink != null) {
+        print(deepLink.data);
+        //Navigator.pushNamed(context, deepLink.path);
+      }
+    } else {
+      print("No intial link");
+    }
+  }
 
   @override
   void dispose() {
@@ -110,7 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
         child: MultiBlocListener(
           listeners: [
             BlocListener<FacebookCubit, dynamic>(
-              cubit: cubitC,
+              bloc: cubitC,
               listener: (ctx, state) {
                 if (state == FacebookAuthStatus.SignUp) {
                   setState(() {
@@ -134,7 +179,7 @@ class _SignInScreenState extends State<SignInScreen> {
               },
             ),
             BlocListener<GoogleCubit, dynamic>(
-              cubit: cubitB,
+              bloc: cubitB,
               listener: (ctx, state) {
                 //print(state);
                 if (state == GoogleLoginStatus.SignUp) {
@@ -160,7 +205,7 @@ class _SignInScreenState extends State<SignInScreen> {
             )
           ],
           child: BlocConsumer<LoginCubit, LoginStatus>(
-            cubit: cubitA,
+            bloc: cubitA,
             listener: (ctx, state) {
               if (state == LoginStatus.Authenticated) {
                 DefaultPageTransition transition =
@@ -270,8 +315,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   height: 40,
                   margin: EdgeInsets.only(top: 20),
                   child: ElevatedButton(
-                    onPressed: () {
-                      cubitB.authenticate();
+                    onPressed: () async {
+                      await launch(
+                          'http://192.168.43.157:8000/auth/v1/web/google');
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

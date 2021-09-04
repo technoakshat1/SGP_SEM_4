@@ -22,6 +22,7 @@ import buildGetUserDetails from "./authentication/getUserDetails.js";
 import buildCreateFacebookUser from "./createUser/createFacebookUser.js";
 import buildLoginFacebookUser from "./authentication/loginFacebookUser.js";
 import buildFacebookUserExists from "./authentication/facebookUserExists.js";
+import buildSetGoogleUsername from "./createUser/setGoogleUsername.js";
 
 import buildCreatePost from "./posts/createPost.js";
 import buildGetPostByUserId from "./posts/getPostByUserId.js";
@@ -63,6 +64,7 @@ export const loginGoogleUser = buildLoginGoogleUser(
   googleAuthController
 );
 export const googleUserExists = buildGoogleUserExists(userDb);
+
 export const createFacebookUser = buildCreateFacebookUser(
   jwtController,
   userDb,
@@ -76,6 +78,8 @@ export const loginFacebookUser = buildLoginFacebookUser(
   facebookAuthController
 );
 export const facebookUserExists = buildFacebookUserExists(userDb);
+export const setGoogleUsername=buildSetGoogleUsername(userDb,jwtController);
+
 
 export const createPost=buildCreatePost(postRepo,postsRecordController,likesController);
 export const getPostByUserId=buildGetPostByUserId(postRepo);

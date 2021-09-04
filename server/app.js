@@ -1,24 +1,43 @@
 import dotenv from "dotenv";
 const express = require("express");
-import bodyParser from "body-parser";
+const cors = require("cors");
 import passport from "passport";
-import passportLocalMongoose from "passport-local-mongoose";
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
+import session from "express-session";
+var GoogleStrategy = require("passport-google-oauth20").Strategy;
+var FacebookStrategy = require("passport-facebook").Strategy;
 
 //routers
 import buildRouter from "./routes/authV1Router.js";
 import buildPostsRouter from "./routes/postsV1Router.js";
 import buildNetworkRouter from "./routes/networkV1Router.js";
 import buildLikesRouter from "./routes/likesV1Router.js";
+import { googleUserExists, facebookUserExists } from "./services/index.js";
+import { userDb,jwtController } from "./controller/index.js";
 
 dotenv.config();
 
 const app = express();
 
 app.use(
-  bodyParser.urlencoded({
+  express.urlencoded({
     extended: true,
+  })
+);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  })
+);
+
+app.use(
+  session({
+    secret: process.env.API_SECRET,
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
@@ -28,19 +47,87 @@ mongoose.connect("mongodb://localhost:27017/userDb1", {
 });
 mongoose.set("useCreateIndex", true);
 app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(async function(id, done) {
+   try{
+    let user=await userDb.getUser(id);
+    done(null,user);
+   }catch(err){
+     done(err,null);
+   }
+});
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://192-168-43-157.nip.io:8000/auth/v1/web/google/callback",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      try {
+        let user = await userDb.findOrRegisterGoogleUser({
+          googleId: profile.id,
+          username: profile.username,
+          email: profile._json.email,
+          photoUrl: profile.photos[0].value,
+          displayName: profile.displayName,
+        });
+        
+        let token=await jwtController.sign(profile.id);
+
+        let userWithToken={...user,token:token}
+        return cb(null,userWithToken);
+      } catch (err) {
+        return cb(err, null);
+      }
+    }
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_WEB_APP_ID,
+      clientSecret: process.env.FACEBOOK_WEB_APP_SECRET,
+      callbackURL: "http://localhost:8000/auth/v1/web/facebook/callback",
+      profileFields: ["id", "emails", "name", "displayName"],
+      passReqToCallback: false,
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      try {
+        let user = await userDb.findOrRegisterFacebookUser({
+          facebookId: profile.id,
+          username: profile.username,
+          email: profile._json.email,
+          photoUrl:"",
+          displayName: profile.displayName,
+        });
+        return cb(null,user);
+      } catch (err) {
+        return cb(err, null);
+      }
+    }
+  )
+);
 
 const authAPIRouter = buildRouter();
-const postsAPIRouter=buildPostsRouter();
-const networkAPIRouter=buildNetworkRouter();
-const likesAPIRouter=buildLikesRouter();
+const postsAPIRouter = buildPostsRouter();
+const networkAPIRouter = buildNetworkRouter();
+const likesAPIRouter = buildLikesRouter();
 
-app.use("/auth",authAPIRouter);
-app.use("/posts",postsAPIRouter);
-app.use("/network",networkAPIRouter);
-app.use("/likes",likesAPIRouter);
+app.use("/auth", authAPIRouter);
+app.use("/posts", postsAPIRouter);
+app.use("/network", networkAPIRouter);
+app.use("/likes", likesAPIRouter);
 
-app.listen(3000, function (req, res) {
-  console.log("Server started at http://localhost:3000");
+app.listen(8000, function (req, res) {
+  console.log("Server started at http://localhost:8000");
 });
 
 // app.get("/login", function(req,res){

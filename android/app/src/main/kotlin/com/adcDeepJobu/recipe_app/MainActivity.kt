@@ -1,4 +1,4 @@
-package com.adcDeepJobu.recipe_app
+package com.adcDeepJobu.recipeApp
 
 import io.flutter.embedding.android.FlutterActivity
 

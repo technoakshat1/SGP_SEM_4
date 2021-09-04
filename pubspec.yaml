@@ -21,18 +21,19 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  google_sign_in: ^4.5.9
-  font_awesome_flutter: ^8.11.0
-  lottie: ^0.7.0
-  flutter_bloc: ^6.1.2
-  bloc: ^6.0.0
-  http: ^0.12.2
-  shared_preferences: ^0.5.12+4
-  email_validator: '^1.0.5'
-  password_strength: ^0.1.3
+  font_awesome_flutter: ^9.1.0
+  lottie: ^1.1.0
+  flutter_bloc: ^7.1.0
+  bloc: ^7.0.0
+  http: ^0.13.3
+  shared_preferences: ^2.0.6
+  email_validator: ^2.0.1
+  password_strength: ^0.2.0
   flutter_facebook_login: ^3.0.0
   like_button: ^2.0.2
   flutter_xlider: ^3.4.0
+  firebase_dynamic_links: ^2.0.9
+  url_launcher: ^6.0.10
 
   flutter:
     sdk: flutter
@@ -45,7 +46,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.7.0"
+  flutter_launcher_icons: ^0.9.1
 flutter_icons:
   ios: true
   android: true

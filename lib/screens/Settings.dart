@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_app/backend/bloc/ThemeChanger.dart';
 
@@ -37,10 +36,9 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-   
     switch (Theme.of(context).brightness) {
       case Brightness.light:
-        _darkTheme=false;
+        _darkTheme = false;
         break;
       case Brightness.dark:
         _darkTheme = true;

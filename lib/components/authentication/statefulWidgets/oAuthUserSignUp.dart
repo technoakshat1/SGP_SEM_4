@@ -46,10 +46,8 @@ class _OAuthSignUpDialogState extends State<OAuthSignUpDialog> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<OAuthInterface, dynamic>(
-            cubit: widget.cubit, listener: (ctx, state) {}),
         BlocListener<SignUpCubit, dynamic>(
-          cubit: cubitB,
+          bloc: cubitB,
           listener: (ctx, state) {
             if (state is UsernameAvailability) {
               if (state == UsernameAvailability.Loading) {

@@ -5,6 +5,7 @@ import passportLocalMongoose from "passport-local-mongoose";
 import jwt from "jsonwebtoken";
 import {OAuth2Client} from "google-auth-library";
 import axios from 'axios';
+import findOrCreate from 'mongoose-findorcreate';
 dotenv.config();
 
 //controllers
@@ -37,6 +38,7 @@ userSchema.plugin(passportLocalMongoose, {
     NoSaltValueStoredError:"username_incorrect"
   },
 });
+userSchema.plugin(findOrCreate);
 const User = new mongoose.model("user", userSchema);
 passport.use(User.createStrategy());
 
@@ -93,7 +95,9 @@ const PostsRecord=new mongoose.model("postsRecord",postsRecordSchema);
 
 // console.log(process.env.JWT_SECRET);
 export const jwtController = buildJwtController(jwt, process.env.JWT_SECRET);
+
 export const userDb = buildUserDb(User, jwtController);
+
 export const googleAuthController=buildGoogleOAuthController(OAuth2Client);
 export const facebookAuthController=buildOAuthFacebookController(axios);
 export const postRepo=buildPostRepo(Post);

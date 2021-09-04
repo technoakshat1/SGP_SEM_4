@@ -35,7 +35,7 @@ class FacebookCubit extends Cubit<dynamic> implements OAuthInterface{
         print("Logged In");
         print(facebookUser.accessToken);
         var token=facebookUser.accessToken.token;
-        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,id,email&access_token=$token');
+        final graphResponse = await http.get(Uri.parse('https://graph.facebook.com/v2.12/me?fields=name,picture,id,email&access_token=$token'));
         final profile=json.decode(graphResponse.body);
 
         final response=await _authController.facebookUserExists(profile['id']);

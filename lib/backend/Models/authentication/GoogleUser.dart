@@ -7,4 +7,9 @@ class GoogleUser extends OAuthUser {
   String username;
   String email;
   String displayName;
+
+  @override
+  String toString() {
+    return "{accessToken:$accessToken,googleId:$googleId,photoUrl:$photoUrl,username:$username,email:$email,displayName:$displayName}";
+  }
 }

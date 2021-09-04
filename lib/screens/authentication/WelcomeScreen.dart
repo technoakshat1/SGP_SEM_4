@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:recipe_app/screens/HomeScreen.dart';
 
 //bloc
 import '../../backend/bloc/LoginCubit.dart';
 //animation
 import '../../components/animatedRoutes/DefaultPageTransition.dart';
-import '../authentication/SignInLoadingScreen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key key}) : super(key: key);
@@ -33,8 +33,8 @@ class WelcomeScreen extends StatelessWidget {
             Navigator.of(ctx).pushReplacementNamed('/login');
           }
         },
-        child:Container(
-          margin:EdgeInsets.only(left:5),
+        child: Container(
+          margin: EdgeInsets.only(left: 5),
           padding: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +56,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                margin:EdgeInsets.all(30),
+                margin: EdgeInsets.all(30),
                 child: CircularProgressIndicator(
                   value: null,
                   valueColor: new AlwaysStoppedAnimation<Color>(

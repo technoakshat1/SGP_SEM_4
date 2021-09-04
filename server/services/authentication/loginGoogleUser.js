@@ -5,10 +5,10 @@ export default function buildLoginGoogleUser(
 ) {
   return async function loginGoogleUser(httpBody) {
     try {
-      let userId = await verfiyGoogleUser(httpBody.accessToken);
+      let googleId = await jwtController.verify(httpBody.token);
 
-      if (userId && userId === httpBody.googleId) {
-        let user = await userDb.getGoogleUser(userId);
+      if (googleId === httpBody.googleId) {
+        let user = await userDb.getGoogleUser(httpBody.googleId);
 
         if (user) {
           if (user.username === httpBody.username) {
@@ -17,6 +17,7 @@ export default function buildLoginGoogleUser(
           }
         }
       }
+
       return { Error: "accessToken_incorrect" };
     } catch (err) {
       console.log(err);

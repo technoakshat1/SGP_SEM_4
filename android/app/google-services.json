@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "239994828673",
+    "project_id": "kitchencloud-edef4",
+    "storage_bucket": "kitchencloud-edef4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239994828673:android:d2efd492eb0685573b1a80",
+        "android_client_info": {
+          "package_name": "com.adcDeepJobu.recipeApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239994828673-he7a37t964pab2l4qhg58okij7nefvku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adcDeepJobu.recipeApp",
+            "certificate_hash": "156f87244632d5b1a5deaf344d2412a89249924e"
+          }
+        },
+        {
+          "client_id": "239994828673-7lf3mr0k0b77gdg2npoi5u4afbcuieba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDILkJ6nFqttEzt7kgUNFWbDiWq-74BB0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239994828673-7lf3mr0k0b77gdg2npoi5u4afbcuieba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

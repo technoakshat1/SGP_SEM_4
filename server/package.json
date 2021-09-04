@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "babel-node": "babel-node --presets=@babel/preset-env",
-    "start": "nodemon --exec npm run babel-node -- app.js",
+    "babel-node": "babel-node --preset=@babel/preset-env",
+    "start": "npm run babel-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,16 +13,22 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "firebase-dynamic-links": "^1.1.0",
     "google-auth-library": "^7.0.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
+    "mongoose-findorcreate": "^3.0.0",
     "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-local-mongoose": "^6.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.16",
+    "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.16",
     "@babel/node": "^7.12.16",
     "@babel/preset-env": "^7.12.16"

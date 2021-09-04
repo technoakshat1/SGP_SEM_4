@@ -35,7 +35,7 @@ export default function buildCreateUser(
 
       return { signUp: true, token: registeredUser };
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
       return { signUp: false, Error: err.message };
     }
   };

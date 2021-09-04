@@ -74,10 +74,31 @@ export default function buildUserDb(userModel, jwtController) {
     return user;
   }
 
+  async function getUser(id){
+    let user=await userModel.findOne({_id:id});
+    return user;
+  }
+
+  async function findOrRegisterGoogleUser(user){
+    let foundOrCreatedUser=await userModel.findOrCreate({googleId:user.googleId},user);
+    return foundOrCreatedUser;
+  }
+
+  async function findOrRegisterFacebookUser(user){
+    let foundOrCreatedUser=await userModel.findOrCreate({facebookId:user.facebookId},user);
+    return foundOrCreatedUser.doc;
+  }
+
+  async function findUserAndUpdate(conditions,fieldsToUpdate){
+    let updatedUser=await userModel.findOneAndUpdate(conditions,fieldsToUpdate);
+    return updatedUser;
+  }
+
   return Object.freeze({
     register: register,
     exists: exists,
     login: login,
+    getUser:getUser,
     getGoogleUser:getGoogleUser,
     getFacebookUser:getFacebookUser,
     registerGoogleUser:registerGoogleUser,
@@ -85,5 +106,8 @@ export default function buildUserDb(userModel, jwtController) {
     getNetworkRepoId:getNetworkRepoId,
     getPostsRecordId:getPostsRecordId,
     getUserDetails:getUserDetails,
+    findOrRegisterFacebookUser:findOrRegisterFacebookUser,
+    findOrRegisterGoogleUser:findOrRegisterGoogleUser,
+    findUserAndUpdate:findUserAndUpdate,
   });
 }

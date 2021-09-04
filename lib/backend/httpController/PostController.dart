@@ -9,7 +9,7 @@ class PostController extends HttpMain {
   }
 
   Future<List> getPostByUserId(String userId) async {
-    String uri=postUrl+"/post/"+userId;
+    String uri = postUrl + "/post/" + userId;
     return await _parseRequestAndGetPosts(uri);
   }
 
@@ -40,7 +40,7 @@ class PostController extends HttpMain {
     Uri uri = Uri(
         scheme: "http",
         host: HttpMain.pcIpv4,
-        port: 3000,
+        port: 8000,
         path: "/posts/v1/posts",
         queryParameters: {
           if (cat != null) "cat": cat,

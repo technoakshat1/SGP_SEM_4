@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import './OAuthInterface.dart';
 
 //controller
@@ -14,46 +14,42 @@ class GoogleCubit extends Cubit<dynamic> implements OAuthInterface {
   GoogleCubit() : super(GoogleLoginStatus.UnAuthenticated);
 
   final AuthController _authController = AuthController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: ['email','profile']);
   GoogleUser user = GoogleUser();
 
- void logout(){
-   _googleSignIn.signOut();
- }
+  void logout() {
+    //_googleSignIn.signOut();
+  }
 
-  void authenticate() async {
-    final googleUser = await _googleSignIn.signIn();
-    //print(googleUser.id);
-    if (googleUser != null) {
-      final googleAccount = await googleUser.authentication;
-      //print(googleAccount.idToken);
-      final response = await _authController.googleUserExists(googleUser.id);
-      if (response == null) {
-        user.googleId = googleUser.id;
-        user.accessToken = googleAccount.idToken;
-        user.photoUrl = googleUser.photoUrl;
-        user.email = googleUser.email;
-        user.displayName = googleUser.displayName;
-        emit(GoogleLoginStatus.SignUp);
-      } else {
-        user.username = response.username;
-        user.googleId = googleUser.id;
-        user.accessToken=googleAccount.idToken;
-        final login = await _authController.loginGoogleUser(user);
-        if (login) {
+  void login(bool created, String username, String googleId,
+      String accessToken) async {
+    emit(GoogleLoginStatus.Loading);
+    user.googleId = googleId;
+    user.accessToken = accessToken;
+    if (created) {
+      emit(GoogleLoginStatus.SignUp);
+    } else {
+      try {
+        user.username = username;
+        if (await _authController.loginGoogleUser(user)) {
           emit(GoogleLoginStatus.Authenticated);
         } else {
           emit(GoogleLoginStatus.UnAuthenticated);
         }
+      } catch (e, s) {
+        print('login error: $e - stack: $s');
+        emit(GoogleLoginStatus.UnAuthenticated);
       }
     }
-    emit(GoogleLoginStatus.UnAuthenticated);
+  }
+
+  void authenticate() async {
+    //print(googleUser.id);
   }
 
   void signUp(String username) async {
     emit(GoogleLoginStatus.Loading);
     user.username = username;
+    print(user);
     final response = await _authController.signUpGoogleUser(user);
     if (response) {
       emit(GoogleLoginStatus.Authenticated);
@@ -63,6 +59,6 @@ class GoogleCubit extends Cubit<dynamic> implements OAuthInterface {
   }
 
   void signOut() async {
-    await _googleSignIn.signOut();
+    //await _googleSignIn.signOut();
   }
 }
