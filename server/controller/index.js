@@ -42,6 +42,9 @@ userSchema.plugin(findOrCreate);
 const User = new mongoose.model("user", userSchema);
 passport.use(User.createStrategy());
 
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 const postSchema=new mongoose.Schema({
   title:String,
   userId:String,

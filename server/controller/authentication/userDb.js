@@ -1,11 +1,14 @@
 export default function buildUserDb(userModel, jwtController) {
-  async function register(rawUser, password) {
+  async function register(rawUser, password,web) {
     //console.log(password);
     let user = new userModel(rawUser);
     try {
       await userModel.register(user, password);
       const token = await jwtController.sign(user.username);
       user.save();
+      if(web){
+        return user;
+      }
       return token;
     } catch (err) {
       user.deleteOne({ username: user.username });
@@ -86,7 +89,7 @@ export default function buildUserDb(userModel, jwtController) {
 
   async function findOrRegisterFacebookUser(user){
     let foundOrCreatedUser=await userModel.findOrCreate({facebookId:user.facebookId},user);
-    return foundOrCreatedUser.doc;
+    return foundOrCreatedUser;
   }
 
   async function findUserAndUpdate(conditions,fieldsToUpdate){

@@ -44,12 +44,13 @@ app.use(
 mongoose.connect("mongodb://localhost:27017/userDb1", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 mongoose.set("useCreateIndex", true);
 app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser(function(user, done) {
-  done(null, user._id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(async function(id, done) {
@@ -96,7 +97,7 @@ passport.use(
       clientID: process.env.FACEBOOK_WEB_APP_ID,
       clientSecret: process.env.FACEBOOK_WEB_APP_SECRET,
       callbackURL: "http://localhost:8000/auth/v1/web/facebook/callback",
-      profileFields: ["id", "emails", "name", "displayName"],
+      profileFields: ["id", "emails", "name", "displayName",'picture.type(large)'],
       passReqToCallback: false,
     },
     async function (accessToken, refreshToken, profile, cb) {
@@ -105,10 +106,11 @@ passport.use(
           facebookId: profile.id,
           username: profile.username,
           email: profile._json.email,
-          photoUrl:"",
+          photoUrl:profile.photos[0].value,
           displayName: profile.displayName,
         });
-        return cb(null,user);
+        let token=await jwtController.sign(profile.id);
+        return cb(null,{...user,token:token});
       } catch (err) {
         return cb(err, null);
       }

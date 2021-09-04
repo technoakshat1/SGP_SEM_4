@@ -17,6 +17,7 @@ import {
   facebookUserExists,
   getUserDetails,
   setGoogleUsername,
+  setFacebookUsername
 } from "../services/index.js";
 
 export default function buildRouter() {
@@ -66,7 +67,7 @@ export default function buildRouter() {
   });
 
   router.post("/v1/local/signUp", async (req, res) => {
-    let token = await createUser(req.body);
+    let token = await createUser(req.body,false);
     res.json(token);
   });
 
@@ -81,6 +82,27 @@ export default function buildRouter() {
     res.json(authenticated);
   });
 
+  router.post("/v1/web/local/signUp",async (req,res)=>{
+    let user=await createUser(req.body,true);
+    req.logIn(user,(err)=>{
+        if(!err){
+          res.json(user);
+        }else{
+          console.log(err);
+          res.sendStatus(500);
+        }
+    });
+  });
+
+  router.post("/v1/web/local/login",passport.authenticate("local"),async (req,res)=>{
+      res.json({username:req.user.username,displayName:req.user.displayName,photoUrl:req.user.photoUrl});
+  });
+
+  router.get("/v1/web/local/logout",(req,res)=>{
+      req.logOut();
+      res.sendStatus(200);
+  });
+
   router.get("/v1/google/:googleId", async (req, res) => {
     let exists = await googleUserExists(req.params.googleId);
     res.json(exists);
@@ -91,7 +113,41 @@ export default function buildRouter() {
       req.body.username,
       req.body.googleId,
       req.body.token,
+      false
     );
+    res.json(user);
+  });
+
+  router.post("/v1/web/google/username", async (req, res) => {
+    let user = await setGoogleUsername(
+      req.body.username,
+      req.body.googleId,
+      req.body.token,
+      true
+    );
+    //console.log(user);
+    req.login(user,(err)=>{
+      if(err){
+        console.log(err);
+      }
+    });
+
+    res.json(user);
+  });
+
+  router.post("/v1/web/facebook/username", async (req, res) => {
+    let user = await setFacebookUsername(
+      req.body.username,
+      req.body.facebookId,
+      req.body.token,
+    );
+    //console.log(user);
+    req.login(user,(err)=>{
+      if(err){
+        console.log(err);
+      }
+    });
+
     res.json(user);
   });
 
@@ -118,7 +174,6 @@ export default function buildRouter() {
   router.get("/v1/web/google", (req, res, next) => {
     passport.authenticate("google", {
       scope: ["email", "profile"],
-      session: false,
     })(req, res, next);
   });
 
@@ -152,7 +207,12 @@ export default function buildRouter() {
                 },
               },
             });
-          //console.log(previewLink);
+
+          req.logIn(user.doc,(err)=>{
+            console.log(err);
+          });
+
+          //console.log(user.doc);
           res.redirect(shortLink);
           return;
         }
@@ -163,17 +223,20 @@ export default function buildRouter() {
   });
 
   router.get("/v1/web/facebook", (req, res, next) => {
-    passport.authenticate("facebook", { session: false })(req, res, next);
+    passport.authenticate("facebook")(req, res, next);
   });
 
   router.get("/v1/web/facebook/callback", (req, res, next) => {
-    passport.authenticate("facebook", async function (err, user, profile) {
+    passport.authenticate("facebook", async function (err, user) {
       if (!err) {
         if (user.created) {
-          return res.send("Hello user created!");
+          return res.redirect(`http://localhost:3000/facebook-login?created=true&facebookId=${user.doc.facebookId}&token=${user.token}`);
         } else {
           //login
-          return res.send("Hello! user logged in!");
+          req.logIn(user.doc,(err)=>{
+            console.log(err);
+          });
+          return res.redirect(`http://localhost:3000/facebook-login?created=false&username=${user.doc.username}&facebookId=${user.doc.facebookId}&token=${user.token}`);
         }
       }
       console.log(err);
@@ -182,7 +245,7 @@ export default function buildRouter() {
   });
 
   router.get("/v1", (req, res) => {
-    res.send("<h1>Kitchen Cloud oAuth API!</h1>");
+    res.send("<h1>Kitchen Cloud oAuth API Version 1.0.0!</h1>");
   });
 
   return router;

@@ -5,7 +5,7 @@ export default function buildCreateUser(
   networkController,
   postsRecordController
 ) {
-  return async function createUser(httpBody) {
+  return async function createUser(httpBody,web) {
     //console.log(httpBody);
     try {
       const user = makeUser({
@@ -31,7 +31,11 @@ export default function buildCreateUser(
           user.networkRepoId = networkRepo.id;
           //console.log(user);
 
-      let registeredUser = await userDb.register(user, httpBody.password);
+      let registeredUser = await userDb.register(user, httpBody.password,web);
+
+      if(web){
+        return registeredUser;
+      }
 
       return { signUp: true, token: registeredUser };
     } catch (err) {
