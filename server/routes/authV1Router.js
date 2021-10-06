@@ -17,7 +17,9 @@ import {
   facebookUserExists,
   getUserDetails,
   setGoogleUsername,
-  setFacebookUsername
+  setFacebookUsername,
+  webFacebookLogin,
+  webGoogleLogin,
 } from "../services/index.js";
 
 export default function buildRouter() {
@@ -67,7 +69,7 @@ export default function buildRouter() {
   });
 
   router.post("/v1/local/signUp", async (req, res) => {
-    let token = await createUser(req.body,false);
+    let token = await createUser(req.body, false);
     res.json(token);
   });
 
@@ -82,25 +84,33 @@ export default function buildRouter() {
     res.json(authenticated);
   });
 
-  router.post("/v1/web/local/signUp",async (req,res)=>{
-    let user=await createUser(req.body,true);
-    req.logIn(user,(err)=>{
-        if(!err){
-          res.json(user);
-        }else{
-          console.log(err);
-          res.sendStatus(500);
-        }
+  router.post("/v1/web/local/signUp", async (req, res) => {
+    let user = await createUser(req.body, true);
+    req.logIn(user, (err) => {
+      if (!err) {
+        res.json(user);
+      } else {
+        console.log(err);
+        res.sendStatus(500);
+      }
     });
   });
 
-  router.post("/v1/web/local/login",passport.authenticate("local"),async (req,res)=>{
-      res.json({username:req.user.username,displayName:req.user.displayName,photoUrl:req.user.photoUrl});
-  });
+  router.post(
+    "/v1/web/local/login",
+    passport.authenticate("local"),
+    async (req, res) => {
+      res.json({
+        username: req.user.username,
+        displayName: req.user.displayName,
+        photoUrl: req.user.photoUrl,
+      });
+    }
+  );
 
-  router.get("/v1/web/local/logout",(req,res)=>{
-      req.logOut();
-      res.sendStatus(200);
+  router.get("/v1/web/local/logout", (req, res) => {
+    req.logOut();
+    res.sendStatus(200);
   });
 
   router.get("/v1/google/:googleId", async (req, res) => {
@@ -126,8 +136,8 @@ export default function buildRouter() {
       true
     );
     //console.log(user);
-    req.login(user,(err)=>{
-      if(err){
+    req.login(user, (err) => {
+      if (err) {
         console.log(err);
       }
     });
@@ -139,11 +149,11 @@ export default function buildRouter() {
     let user = await setFacebookUsername(
       req.body.username,
       req.body.facebookId,
-      req.body.token,
+      req.body.token
     );
     //console.log(user);
-    req.login(user,(err)=>{
-      if(err){
+    req.login(user, (err) => {
+      if (err) {
         console.log(err);
       }
     });
@@ -174,13 +184,38 @@ export default function buildRouter() {
   router.get("/v1/web/google", (req, res, next) => {
     passport.authenticate("google", {
       scope: ["email", "profile"],
+      session:false
     })(req, res, next);
+  });
+
+  router.post("/v1/web/google/login", async (req, res) => {
+    let user = await webGoogleLogin(req.body);
+    if (user.Error) {
+      res.json({ login: false, Error: user.Error });
+    } else {
+      req.login(user, (err) => {
+        console.log(err);
+      });
+      res.json({login:true,username:user.username});
+    }
+  });
+
+  router.post("/v1/web/facebook/login", async (req, res) => {
+    let user = await webFacebookLogin(req.body);
+    if (user.Error) {
+      res.json({ login: false, Error: user.Error });
+    } else {
+      req.login(user, (err) => {
+        console.log(err);
+      });
+      res.json({login:true,username:user.username});
+    }
   });
 
   router.get("/v1/web/google/callback", (req, res, next) => {
     passport.authenticate("google", async function (err, user) {
       if (!err) {
-        console.log(user);
+        //console.log(user);
         if (user.created) {
           //signup
           const { shortLink, previewLink } =
@@ -208,10 +243,6 @@ export default function buildRouter() {
               },
             });
 
-          req.logIn(user.doc,(err)=>{
-            console.log(err);
-          });
-
           //console.log(user.doc);
           res.redirect(shortLink);
           return;
@@ -223,20 +254,23 @@ export default function buildRouter() {
   });
 
   router.get("/v1/web/facebook", (req, res, next) => {
-    passport.authenticate("facebook")(req, res, next);
+    passport.authenticate("facebook",{
+      session:false,
+    })(req, res, next);
   });
 
   router.get("/v1/web/facebook/callback", (req, res, next) => {
     passport.authenticate("facebook", async function (err, user) {
       if (!err) {
         if (user.created) {
-          return res.redirect(`http://localhost:3000/facebook-login?created=true&facebookId=${user.doc.facebookId}&token=${user.token}`);
+          return res.redirect(
+            `http://localhost:3000/facebook-login?created=true&facebookId=${user.doc.facebookId}&token=${user.token}`
+          );
         } else {
           //login
-          req.logIn(user.doc,(err)=>{
-            console.log(err);
-          });
-          return res.redirect(`http://localhost:3000/facebook-login?created=false&username=${user.doc.username}&facebookId=${user.doc.facebookId}&token=${user.token}`);
+          return res.redirect(
+            `http://localhost:3000/facebook-login?created=false&facebookId=${user.doc.facebookId}&username=${user.doc.username}&token=${user.token}`
+          );
         }
       }
       console.log(err);

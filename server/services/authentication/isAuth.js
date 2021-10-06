@@ -4,6 +4,7 @@ export default function buildIsAuthenticated(jwtController, userDb) {
     try {
       let verifiedUser;
       let token = extractToken(req.headers.authorization);
+      //console.log(req.headers)
       if(token && token==='WEB'){
         //web-based authentication;
         if(req.isAuthenticated()){
