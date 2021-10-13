@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:recipe_app/backend/httpController/httpMain.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:recipe_app/backend/bloc/FacebookCubit.dart';
@@ -317,7 +318,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await launch(
-                          'http://192.168.43.157:8000/auth/v1/web/google');
+                          'http://${HttpMain.pcIpv4}:8000/auth/v1/web/google');
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
