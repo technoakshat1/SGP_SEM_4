@@ -19,6 +19,9 @@ dotenv.config();
 
 const app = express();
 
+const PCIPV4="192.168.27.220";
+const googleCallbackLinkIP=PCIPV4.replace(".","-");
+
 app.use(
   express.urlencoded({
     extended: true,
@@ -70,7 +73,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://192-168-43-157.nip.io:8000/auth/v1/web/google/callback",
+      callbackURL: `http://${googleCallbackLinkIP}.nip.io:8000/auth/v1/web/google/callback`,
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     async function (accessToken, refreshToken, profile, cb) {

@@ -96,17 +96,30 @@ export default function buildRouter() {
     });
   });
 
-  router.post(
-    "/v1/web/local/login",
-    passport.authenticate("local"),
-    async (req, res) => {
-      res.json({
-        username: req.user.username,
-        displayName: req.user.displayName,
-        photoUrl: req.user.photoUrl,
-      });
-    }
-  );
+  router.post("/v1/web/local/login", async (req, res, next) => {
+    passport.authenticate("local", function (err, user, info) {
+      if (!err && user) {
+        if (!user.facebookId && !user.googleId) {
+          req.login(user, (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+          res.json({
+            username: req.user.username,
+            displayName: req.user.displayName,
+            photoUrl: req.user.photoUrl,
+          });
+        } else {
+          res.json({
+            Error: "social_user",
+          });
+        }
+      } else {
+        res.json({ Error: info.message, username: null });
+      }
+    })(req, res, next);
+  });
 
   router.get("/v1/web/local/logout", (req, res) => {
     req.logOut();
@@ -184,7 +197,7 @@ export default function buildRouter() {
   router.get("/v1/web/google", (req, res, next) => {
     passport.authenticate("google", {
       scope: ["email", "profile"],
-      session:false
+      session: false,
     })(req, res, next);
   });
 
@@ -196,7 +209,7 @@ export default function buildRouter() {
       req.login(user, (err) => {
         console.log(err);
       });
-      res.json({login:true,username:user.username});
+      res.json({ login: true, username: user.username });
     }
   });
 
@@ -208,7 +221,7 @@ export default function buildRouter() {
       req.login(user, (err) => {
         console.log(err);
       });
-      res.json({login:true,username:user.username});
+      res.json({ login: true, username: user.username });
     }
   });
 
@@ -254,8 +267,8 @@ export default function buildRouter() {
   });
 
   router.get("/v1/web/facebook", (req, res, next) => {
-    passport.authenticate("facebook",{
-      session:false,
+    passport.authenticate("facebook", {
+      session: false,
     })(req, res, next);
   });
 
