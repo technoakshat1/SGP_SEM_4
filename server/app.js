@@ -19,8 +19,7 @@ dotenv.config();
 
 const app = express();
 
-const PCIPV4="192.168.27.220";
-const googleCallbackLinkIP=PCIPV4.replace(".","-");
+const googleCallbackLinkIP="192-168-27-220";//PCIPV4 WITH ALL DOTS(.) REPLACED BY DASHES(-)
 
 app.use(
   express.urlencoded({
