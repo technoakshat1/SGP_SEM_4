@@ -43,14 +43,6 @@ export default function buildMakeUser() {
       throw new Error("firstname_outOfRange");
     }
 
-    if (!lastName) {
-      throw new Error("lastname_empty");
-    }
-
-    if (lastName.length < 2) {
-      throw new Error("lastname_empty");
-    }
-
     if (lastName.length > 30) {
       throw new Error("lastname_outOfRange");
     }
