@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_app/screens/Details.dart';
 
 //blocs
 import './backend/bloc/LoginCubit.dart';
@@ -19,13 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ThemeChanger>(
-      create: (ctx){
-        ThemeChanger changer=ThemeChanger();
+      create: (ctx) {
+        ThemeChanger changer = ThemeChanger();
         changer.getTheme();
         return changer;
       },
-      child: BlocBuilder<ThemeChanger,ThemeMode>(
-        builder:(ctx,state)=> MaterialApp(
+      child: BlocBuilder<ThemeChanger, ThemeMode>(
+        builder: (ctx, state) => MaterialApp(
           title: 'Kitchen Cloud',
           theme: ThemeData(
             fontFamily: 'Roboto',
@@ -55,10 +56,10 @@ class MyApp extends StatelessWidget {
             ),
             iconTheme: IconThemeData(color: Colors.white),
           ),
-           //home:HomeScreen(),
+          //home:HomeScreen(),
           home: BlocProvider(
-            create: (ctx){
-              LoginCubit cubit=LoginCubit();
+            create: (ctx) {
+              LoginCubit cubit = LoginCubit();
               cubit.isAuthenticated();
               return cubit;
             },

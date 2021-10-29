@@ -14,7 +14,8 @@ class PostController extends HttpMain {
   }
 
   Future<List> getPosts() async {
-    String uri = postUrl + "/posts";
+    String url = postUrl + "/posts";
+    Uri uri = Uri.parse(url);
     return await _parseRequestAndGetPosts(uri);
   }
 

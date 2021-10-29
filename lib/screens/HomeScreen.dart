@@ -7,9 +7,7 @@ import '../backend/httpController/PostController.dart';
 import '../backend/httpController/AuthController.dart';
 import '../backend/Models/authentication/DisplayUser.dart';
 
-
 import '../screens/CreateRecipeScreen.dart';
-
 
 //components
 
@@ -31,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   PostController controller = PostController();
   AuthController authController = AuthController();
-  DisplayUser displayUser=DisplayUser();
+  DisplayUser displayUser = DisplayUser();
 
   @override
   void initState() {
@@ -50,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void loadUserDetails() async {
     DisplayUser user = await authController.getCurrentUser();
     setState(() {
-      displayUser=user;
+      displayUser = user;
     });
   }
 
@@ -102,15 +100,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: LogoAppBar(user: displayUser,scaffoldState: _scaffoldKey,),
-      drawer: AppDrawer(user: displayUser,),
+      appBar: LogoAppBar(
+        user: displayUser,
+        scaffoldState: _scaffoldKey,
+      ),
+      drawer: AppDrawer(
+        user: displayUser,
+      ),
       body: RefreshIndicator(
         onRefresh: refreshPosts,
         child: childToRender,
       ),
       floatingActionButton: FABCreateRecipe(
-        onPress: (){
-          DefaultPageTransition transition=DefaultPageTransition(CreateRecipeScreen());
+        onPress: () {
+          DefaultPageTransition transition =
+              DefaultPageTransition(CreateRecipeScreen());
           Navigator.of(context).push(transition.createRoute());
         },
       ),
