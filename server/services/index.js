@@ -43,7 +43,7 @@ import buildLike from "./likes/like.js";
 import buildUnlike from "./likes/unLike.js";
 import buildGetLikedBy from "./likes/getLikedBy.js";
 import buildHasUserLiked from "./likes/hasUserLiked.js";
-
+import buildGetPostById from "./posts/getPostDetailById.js";
 
 export const isAuthenticated = buildIsAuthenticated(jwtController, userDb);
 export const createUser = buildCreateUser(
@@ -103,3 +103,4 @@ export const like=buildLike(likesController);
 export const unlike=buildUnlike(likesController);
 export const getLikedBy=buildGetLikedBy(likesController);
 export const hasUserLiked=buildHasUserLiked(likesController);
+export const getPostById=buildGetPostById(postRepo);

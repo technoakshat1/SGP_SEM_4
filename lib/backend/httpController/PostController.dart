@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import './httpMain.dart';
 import '../Models/post/post.dart';
@@ -7,26 +9,42 @@ class PostController extends HttpMain {
   PostController() {
     postUrl = super.url + "/posts/v1";
   }
+  Future<dynamic> getPostById(Id)async{
+    String uri=postUrl+"/postById/"+Id;
+    final response=await http.get(Uri.parse(uri));
+    String captured=response.body;
+    var decoded=json.decode(captured);
 
+    //print(decoded["polls"][0]["Options"].length);
+    return decoded;
+  /*  int numberOfQuestions=decoded["polls"][0]["Options"].length;
+    List<String>l1=[];
+    l1.add(decoded["polls"][0]["question"]);
+    for(int i=0;i<numberOfQuestions;i++){
+      l1.add(decoded["polls"][0]["Options"][i]);
+    }
+    print(l1);
+    return l1;*/
+  }
   Future<List> getPostByUserId(String userId) async {
     String uri = postUrl + "/post/" + userId;
-    return await _parseRequestAndGetPosts(uri);
+    return await _parseRequestAndGetPosts(Uri.parse(uri));
   }
 
   Future<List> getPosts() async {
     String uri = postUrl + "/posts";
-    return await _parseRequestAndGetPosts(uri);
+    return await _parseRequestAndGetPosts(Uri.parse(uri));
   }
 
   Future<List> getPostsByQuery(String query) async {
     String uri = postUrl + "/posts?q=$query";
-    return await _parseRequestAndGetPosts(uri);
+    return await _parseRequestAndGetPosts(Uri.parse(uri));
   }
 
   Future<List> getPostsByCategories(Categories category) async {
     String cat = _mapCategoryToString(category);
     String uri = postUrl + "/posts?cat=$cat";
-    return await _parseRequestAndGetPosts(uri);
+    return await _parseRequestAndGetPosts(Uri.parse(uri));
   }
 
   Future<List> getPostsByCategoryAndFilters(

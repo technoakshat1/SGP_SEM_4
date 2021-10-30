@@ -7,7 +7,10 @@ export default function buildPostRepo(Post){
         });
         return await post.save();
     }
-
+    async function getPostDetailsById(postId){
+        let post=await Post.findOne({_id:postId},null,null);
+        return post;
+    }
     async function getPostByUserId(userId){
         let post=await Post.findOne({userId:userId},null,{sort:{dateTime:-1}});
         //console.log(post);
@@ -55,6 +58,7 @@ export default function buildPostRepo(Post){
             getPostsByFilters:getPostsByFilters,
             getPostsByQuery:getPostsByQuery,
             getPostsByCategoryAndFilters:getPostsByCategoryAndFilters,
+            getPostDetailsById:getPostDetailsById,
         }
     )
 }

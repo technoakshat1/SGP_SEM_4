@@ -30,6 +30,7 @@ class Post {
 
   void parseAndInflatePost(Map<String, dynamic> response) {
     id=response['_id'];
+    print(id);
     title = response['title'];
     username = response['userId'];
     caption = response['caption'];

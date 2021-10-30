@@ -8,6 +8,7 @@ import {
   getPostsByCategories,
   getPostsByFilters,
   getPostsByCategoryAndFilters,
+  getPostById,
 } from "../services/index.js";
 
 import {array} from "./recipes.js";
@@ -68,6 +69,15 @@ export default function buildPostRouter() {
     } else {
       res.sendStatus(403);
     }
+  });
+  router.get("/v1/postById/:postId", async (req, res) => {
+    //let isAuth = await isAuthenticated(req, true);
+    //if (isAuth && isAuth.authenticated) {
+      let post = await getPostById(req.params.postId);
+      res.json(post);
+    //} else {
+      //res.sendStatus(403);
+    //}
   });
 
   router.post("/v1/post", async (req, res) => {

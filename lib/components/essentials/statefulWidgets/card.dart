@@ -5,6 +5,9 @@ import '../../../backend/httpController/AuthController.dart';
 import '../../../backend/httpController/LikeController.dart';
 import '../../../backend/Models/authentication/DisplayUser.dart';
 
+import '../../animatedRoutes/DefaultPageTransition.dart';
+import '../../../screens/Details.dart';
+
 class PostCard extends StatefulWidget {
   PostCard({
     Key key,
@@ -73,95 +76,103 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
-      child: Card(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Container(
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(3),
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: user == null
-                              ? AssetImage("assets/images/logo_dark_theme.png")
-                              : NetworkImage(user.photoUrl),
+        padding: EdgeInsets.all(5),
+        child: InkWell(
+          onTap: () {
+            DefaultPageTransition transition =
+                DefaultPageTransition(RecipeDetailScreen(id:widget.postId));
+            Navigator.of(context).push(transition.createRoute());
+          },
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(3),
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: user == null
+                                  ? AssetImage(
+                                      "assets/images/logo_dark_theme.png")
+                                  : NetworkImage(user.photoUrl),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(9),
-                      child:
-                          Text(widget.username, style: TextStyle(fontSize: 18)),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Text(widget.title, style: TextStyle(fontSize: 20)),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                height: 200,
-                width: 250,
-                child: Image.network(
-                  widget.postDisplayPhotoUrl,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Text(widget.caption),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Container(
-                      child: LikeButton(
-                        size: 25,
-                        likeCount: likesCount,
-                        onTap: onLikePress,
-                        isLiked: isLiked,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: LikeButton(
-                        size: 25,
-                        likeCount: 300,
-                        likeBuilder: (isLike) => Icon(
-                          Icons.message,
-                          color: isLike ? Colors.greenAccent : Colors.grey,
+                        Container(
+                          margin: EdgeInsets.all(9),
+                          child: Text(widget.username,
+                              style: TextStyle(fontSize: 18)),
                         ),
-                        circleColor: CircleColor(
-                          end: Theme.of(context).primaryColorDark,
-                          start: Theme.of(context).primaryColorLight,
-                        ),
-                      ),
+                      ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: LikeButton(
-                        size: 25,
-                        likeBuilder: (_) => Icon(Icons.share),
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(widget.title, style: TextStyle(fontSize: 20)),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    height: 200,
+                    width: 250,
+                    child: Image.network(
+                      widget.postDisplayPhotoUrl,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(widget.caption),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: LikeButton(
+                            size: 25,
+                            likeCount: likesCount,
+                            onTap: onLikePress,
+                            isLiked: isLiked,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 20),
+                          child: LikeButton(
+                            size: 25,
+                            likeCount: 300,
+                            likeBuilder: (isLike) => Icon(
+                              Icons.message,
+                              color: isLike ? Colors.greenAccent : Colors.grey,
+                            ),
+                            circleColor: CircleColor(
+                              end: Theme.of(context).primaryColorDark,
+                              start: Theme.of(context).primaryColorLight,
+                            ),
+
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 20),
+                          child: LikeButton(
+                            size: 25,
+                            likeBuilder: (_) => Icon(Icons.share),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
